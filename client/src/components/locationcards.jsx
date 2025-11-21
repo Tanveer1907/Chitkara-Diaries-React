@@ -35,7 +35,7 @@ const cards = [
   },
   {
     id: 4,
-    title: "Rockefeller",
+    title: "Sportorium",
     subtitle: "Fitness & Recreation",
     icon: "🏋️‍♂️",
     img: sportoriumImg,
