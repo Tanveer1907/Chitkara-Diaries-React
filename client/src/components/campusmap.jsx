@@ -6,7 +6,7 @@ export default function CampusMap() {
   // REAL 360 LINKS
   const links = {
     library:
-      "https://cloud-sg.insta360.com/share/sg/3e2g4A7v8D7U181j2601714688/player?mediaId=324786636506271744&businessId=324787112710766592",
+      "https://cloud-sg.insta360.com/share/sg/3v2Y4r7w84777X4R4301649920/player?mediaId=324787689624702976&businessId=324787744385536000",
 
     square:
       "https://cloud-sg.insta360.com/share/sg/38234o7X8m7w41338268452864/player?mediaId=324787176153808896&businessId=324787438335561728",
