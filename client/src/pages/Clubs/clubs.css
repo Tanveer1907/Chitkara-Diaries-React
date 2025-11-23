@@ -41,13 +41,13 @@ body {
 
 /* Page Heading */
 .page-header {
-    background-color: #ef6b6b;
+    background: linear-gradient(90deg, #4f0f0f 0%, #621414 100%);
     color: white;
     text-align: center;
     padding: 50px 20px;
     margin: 30px auto 0 auto;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     width: calc(100% - 40px);
 }
 
@@ -55,6 +55,7 @@ body {
     margin: 0;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 32px;
+    color: #fff; /* changed: header title white on dark bg */
 }
 
 /* Sections */
@@ -118,7 +119,7 @@ body {
 .card-content h3 {
     margin: 8px 0;
     font-size: 18px;
-    color: #1565c0;
+    color: #621414; /* changed: club title color -> deep red to match theme */
     font-weight: bold;
 }
 
@@ -132,18 +133,22 @@ body {
     display: inline-block;
     margin-top: 12px;
     padding: 8px 20px;
-    background-color: #c62828;
+    /* match navbar color but a little lighter for better contrast */
+    background: linear-gradient(90deg, #7b1b1b 0%, #6a1414 100%);
     color: #fff;
     border-radius: 20px;
     font-size: 13px;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: background 0.18s ease, transform 0.12s ease;
     text-decoration: none;
+    box-shadow: 0 4px 10px rgba(123,27,27,0.12);
 }
 
 .know-more:hover {
-    background-color: #1565c0;
+    /* slightly lighter/redder on hover */
+    background: linear-gradient(90deg, #b31f1f 0%, #c62828 100%);
+    transform: translateY(-2px);
 }
 
 /* Responsive */
