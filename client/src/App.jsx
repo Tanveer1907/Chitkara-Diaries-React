@@ -10,6 +10,7 @@ import Cricket from "./pages/Cricket/cricket";
 import Basketball from "./pages/Basketball/basketball";
 import Panache from "./pages/Panache/panache";
 import Clubs from "./pages/Clubs/clubs";
+import Natraj from "./pages/Natraj/natraj";
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/basketball" element={<Basketball />} />
         <Route path="/panache" element={<Panache />} />
         <Route path="/clubs" element={<Clubs />} />
+        <Route path="/natraj" element={<Natraj />} />
       </Routes>
     </BrowserRouter>
   );
