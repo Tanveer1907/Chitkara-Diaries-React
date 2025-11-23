@@ -75,11 +75,15 @@ export default function Ieee() {
       <div className="about-container">
         <div className="about-text">
           <h2>Our Mission: Building Coding Excellence</h2>
-          <p>
-            The IEEE Tech Society of Chitkara University is a dynamic community
-            of innovators, engineers, and technology enthusiasts committed to
-            advancing knowledge, research and real-world technical application…
-          </p>
+          <p>he IEEE Tech Society of Chitkara University is a dynamic community of innovators, engineers, and technology 
+                    enthusiasts committed to advancing knowledge and innovation in the field of engineering and technology.
+                    We aim to bridge the gap between theory and practice by empowering students through hands-on projects, workshops, hackathons, 
+                    and technical events aligned with IEEE’s global vision.</p> <p>We foster teamwork, critical thinking, and disciplined practice, 
+                    believing that true coding mastery comes from consistent effort and collaborative learning. Join us to transform your 
+                    passion for code into professional 
+                     success. Our society serves as a platform for students to explore emerging technologies, collaborate on
+                      impactful research, and build solutions that address real-world challenges.</p>
+           
         </div>
 
         <div className="about-image">
