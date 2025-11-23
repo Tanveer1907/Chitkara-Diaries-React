@@ -7,6 +7,8 @@ import VotingPg from "./pages/Voting/Voting_pg"; // <-- add this import
 import Osc from "./pages/Osc/osc";
 import Ieee from "./pages/Ieee/ieee";
 import Cricket from "./pages/Cricket/cricket";
+import Basketball from "./pages/Basketball/basketball";
+import Panache from "./pages/Panache/panache";
 
 export default function App() {
   return (
@@ -18,6 +20,8 @@ export default function App() {
         <Route path="/osc" element={<Osc />} />
         <Route path="/ieee" element={<Ieee />} />
         <Route path ="/cricket" element={<Cricket />} />
+        <Route path ="/basketball" element={<Basketball />} />
+        <Route path ="/panache" element={<Panache />} />
         
       </Routes>
     </BrowserRouter>
