@@ -11,6 +11,9 @@ body {
         color: #333;
         background-color: #ffffff;
 }
+.top-gap {
+  margin-top: 120px; /* same as Home, Clubs, etc */
+}
 
 /* Container 1 - Moving Images */
 .moving-images-container {
@@ -26,7 +29,7 @@ body {
 .moving-strip {
     display: flex;
     animation: moveLeft 35s linear infinite;
-    gap: 30px;
+    gap: 60px;
 }
 .moving-image {
     width: 270px;
@@ -290,74 +293,75 @@ body {
 
 /* Use the floating-label + button styles I gave earlier */
 
-    .site-footer {
-    background: #1d1d1d;
-    color: #f5f5f5;
-    padding: 40px 20px 20px;
-    margin-top: 50px;
-    border-top: 5px solid #d90429; /* Chitkara red accent */
-    font-family: 'Segoe UI', sans-serif;
+  /* CLEAN WHITE FOOTER */
+.clean-footer {
+  width: 100%;
+  background: #ffffff;
+  padding: 50px 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-top: 2px solid #e5e5e5;
+  flex-wrap: wrap;
 }
 
-.footer-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
+.footer-left h3,
+.footer-right h3 {
+  font-size: 22px;
+  color: #222;
+  margin-bottom: 15px;
+}
+
+.footer-left p {
+  font-size: 16px;
+  color: #444;
+  margin: 4px 0;
+}
+
+/* ICONS STYLING */
+.footer-icons {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-icons a {
+  width: 45px;
+  height: 45px;
+  background: #f1f1f1;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  color: #333;
+  transition: 0.3s ease;
+}
+
+/* HOVER COLORS */
+.footer-icons .linkedin:hover {
+  background: #0e76a8;
+  color: white;
+}
+
+.footer-icons .instagram:hover {
+  background: #e1306c;
+  color: white;
+}
+
+.footer-icons .youtube:hover {
+  background: #ff0000;
+  color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .clean-footer {
+    flex-direction: column;
     gap: 40px;
-    max-width: 1100px;
-    margin: auto;
+    padding: 40px 25px;
+  }
 }
 
-.footer-info h3,
-.footer-social h3 {
-    font-size: 1.3rem;
-    margin-bottom: 15px;
-    color: #ff6b35;
-}
-
-.footer-info p {
-    margin: 6px 0;
-    font-size: 0.95rem;
-    line-height: 1.5;
-}
-
-.footer-social .social-icons {
-    display: flex;
-    gap: 15px;
-}
-
-.footer-social .social-icons a {
-    width: 45px;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    background: #333;
-    color: #fff;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-}
-
-.footer-social .social-icons a:hover {
-    transform: scale(1.1);
-}
-
-/* Brand colors */
-.footer-social .twitter:hover { background: #1DA1F2; }
-.footer-social .linkedin:hover { background: #0077b5; }
-.footer-social .instagram:hover { background: #e1306c; }
-.footer-social .youtube:hover { background: #ff0000; }
-
-.footer-bottom {
-    text-align: center;
-    margin-top: 30px;
-    font-size: 0.9rem;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 15px;
-    color: #bbb;
-}
 
 
 /* Timeline Items */

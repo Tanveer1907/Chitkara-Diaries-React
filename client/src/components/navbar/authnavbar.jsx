@@ -1,6 +1,6 @@
 import React from "react";
 import "./navbar.css";
-import logo from "../../assets/chitkara.jpg";
+import logo from "../../assets/logo.jpg";
 import { Link } from "react-router-dom";
 
 export default function AuthNavbar() {

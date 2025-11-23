@@ -1,3 +1,8 @@
+
+.top-gap {
+  margin-top: 120px; /* same as Home, Clubs, etc */
+}
+
 /* ---------------- CONTAINER 1: MOVING IMAGES ---------------- */
 .moving-images-container {
     width: 100%;
@@ -231,55 +236,75 @@
     background: #fcdcdc;
 }
 
-/* ---------------- FOOTER ---------------- */
-.site-footer {
-    background: #1d1d1d;
-    color: #f5f5f5;
-    padding: 40px 20px;
-    border-top: 5px solid #d90429;
+/* CLEAN WHITE FOOTER */
+.clean-footer {
+  width: 100%;
+  background: #ffffff;
+  padding: 50px 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-top: 2px solid #e5e5e5;
+  flex-wrap: wrap;
 }
 
-.footer-container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
+.footer-left h3,
+.footer-right h3 {
+  font-size: 22px;
+  color: #222;
+  margin-bottom: 15px;
+}
+
+.footer-left p {
+  font-size: 16px;
+  color: #444;
+  margin: 4px 0;
+}
+
+/* ICONS STYLING */
+.footer-icons {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-icons a {
+  width: 45px;
+  height: 45px;
+  background: #f1f1f1;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  color: #333;
+  transition: 0.3s ease;
+}
+
+/* HOVER COLORS */
+.footer-icons .linkedin:hover {
+  background: #0e76a8;
+  color: white;
+}
+
+.footer-icons .instagram:hover {
+  background: #e1306c;
+  color: white;
+}
+
+.footer-icons .youtube:hover {
+  background: #ff0000;
+  color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .clean-footer {
+    flex-direction: column;
     gap: 40px;
-    max-width: 1100px;
-    margin: auto;
+    padding: 40px 25px;
+  }
 }
 
-.footer-info h3,
-.footer-social h3 {
-    font-size: 1.3rem;
-    margin-bottom: 15px;
-    color: #ff6b35;
-}
-
-.footer-social .social-icons {
-    display: flex;
-    gap: 15px;
-}
-
-.social-icons a {
-    width: 45px;
-    height: 45px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #333;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    transition: 0.3s ease;
-}
-
-.social-icons a:hover {
-    transform: scale(1.1);
-}
-
-.twitter:hover { background: #1DA1F2; }
-.linkedin:hover { background: #0077b5; }
-.instagram:hover { background: #e1306c; }
-.youtube:hover { background: #ff0000; }
 
 /* ---------------- TIMELINE ---------------- */
 .timeline-item {
@@ -588,6 +613,18 @@
     width: 100%;
     max-width: 250px;
 }
+.player-details ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.player-details ul li {
+    margin: 8px 0;
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: 500;
+}
 
 .stat-item {
     background: rgb(0, 0, 0); 
@@ -673,6 +710,24 @@
     color: #ffffff;
     font-weight: bold;
 }
+/* FIX: Event card text visible */
+.event-card {
+  background: white;
+  color: #333;
+}
+
+.event-card h3,
+.event-card p,
+.event-location {
+  color: #333 !important;
+}
+
+/* Date box ke andar text */
+.event-date-box .month,
+.event-date-box .day {
+  color: #c62828; /* red */
+}
+
 
 /* --- RESPONSIVENESS --- */
 @media (max-width: 768px) {
@@ -704,6 +759,7 @@
     align-items: center;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
 }
 
 .spotlight-title {

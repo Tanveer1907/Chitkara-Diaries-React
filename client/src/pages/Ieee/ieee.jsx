@@ -109,7 +109,7 @@ export default function Ieee() {
   return (
     <>
       <MainNavbar />
-
+      <div className="top-gap"></div>
       {/* MOVING IMAGES STRIP */}
       <div className="moving-images-container">
         <div className="moving-strip">

@@ -3,22 +3,35 @@ import AuthNavbar from "../../components/navbar/authnavbar";
 import "./auth.css";
 import loaderLogo from "../../assets/chitkara.jpg";
 
-
 export default function Auth() {
   const [showLogin, setShowLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  // LOGIN state
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: ""
+  });
+
+  // REGISTER state
+  const [registerData, setRegisterData] = useState({
+    fullname: "",
+    roll: "",
+    batch: "",
+    course: "",
+    email: "",
+    password: ""
+  });
+
   const [loginError, setLoginError] = useState("");
   const [registerError, setRegisterError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   // ---------------- LOGIN ----------------
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoginError("");
 
-    const email = e.target.email.value.trim();
-    const password = e.target.password.value.trim();
-
-    if (!email || !password) {
+    if (!loginData.email || !loginData.password) {
       setLoginError("Please enter both fields.");
       return;
     }
@@ -28,7 +41,7 @@ export default function Auth() {
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(loginData),
       });
 
       const data = await res.json();
@@ -40,8 +53,8 @@ export default function Auth() {
         } else {
           setLoginError(data.message || "Incorrect email or password");
         }
-      }, 800);
-    } catch (err) {
+      }, 600);
+    } catch {
       setLoading(false);
       setLoginError("Server error. Please try again later.");
     }
@@ -52,26 +65,17 @@ export default function Auth() {
     e.preventDefault();
     setRegisterError("");
 
-    const formData = {
-      fullname: e.target.fullname.value.trim(),
-      roll: e.target.roll.value.trim(),
-      batch: e.target.batch.value,
-      course: e.target.course.value,
-      email: e.target.email.value.trim(),
-      password: e.target.password.value.trim(),
-    };
-
-    if (Object.values(formData).some(v => !v)) {
+    if (Object.values(registerData).some((v) => !v)) {
       setRegisterError("Please fill out all fields.");
       return;
     }
 
-    if (!/^[^@]+@[^@]+\.[^@]+$/.test(formData.email)) {
+    if (!/^[^@]+@[^@]+\.[^@]+$/.test(registerData.email)) {
       setRegisterError("Enter a valid email.");
       return;
     }
 
-    if (formData.password.length < 6) {
+    if (registerData.password.length < 6) {
       setRegisterError("Password must be at least 6 characters.");
       return;
     }
@@ -81,7 +85,7 @@ export default function Auth() {
       const res = await fetch("http://localhost:5000/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(registerData),
       });
 
       const data = await res.json();
@@ -89,13 +93,23 @@ export default function Auth() {
       setTimeout(() => {
         setLoading(false);
         if (data.success) {
+          // RESET form
+          setRegisterData({
+            fullname: "",
+            roll: "",
+            batch: "",
+            course: "",
+            email: "",
+            password: ""
+          });
+
           setShowLogin(true);
           setLoginError("Registration successful! Please login.");
         } else {
           setRegisterError(data.message || "Registration failed");
         }
-      }, 800);
-    } catch (err) {
+      }, 600);
+    } catch {
       setLoading(false);
       setRegisterError("Server error. Try again later.");
     }
@@ -113,6 +127,8 @@ export default function Auth() {
 
       <div className="login-container">
         <div className="login-wrapper">
+
+          {/* LEFT HERO SECTION */}
           <div className="login-hero">
             <div className="hero-content">
               <h1>Campus Journey Begins Here</h1>
@@ -135,22 +151,38 @@ export default function Auth() {
             </div>
           </div>
 
+          {/* RIGHT FORM SECTION */}
           <div className="login-form-section">
             <div className="form-container">
+              
               <div className="tab-nav">
-                <button className={showLogin ? "active" : ""} 
-                        onClick={() => { setShowLogin(true); setLoginError(""); setRegisterError(""); }}>
+                <button
+                  className={showLogin ? "active" : ""}
+                  onClick={() => {
+                    setShowLogin(true);
+                    setLoginError("");
+                    setRegisterError("");
+                  }}
+                >
                   Login
                 </button>
-                <button className={!showLogin ? "active" : ""} 
-                        onClick={() => { setShowLogin(false); setLoginError(""); setRegisterError(""); }}>
+
+                <button
+                  className={!showLogin ? "active" : ""}
+                  onClick={() => {
+                    setShowLogin(false);
+                    setLoginError("");
+                    setRegisterError("");
+                  }}
+                >
                   Register
                 </button>
               </div>
 
-              {/* ---------------- LOGIN FORM ---------------- */}
+              {/* ----------- LOGIN FORM ----------- */}
               {showLogin ? (
                 <form className="login-form" onSubmit={handleLogin}>
+                  
                   <div className="form-header">
                     <h2>Student Login</h2>
                     <p>Enter your details to access your account</p>
@@ -159,15 +191,34 @@ export default function Auth() {
                   <div className="form-group">
                     <label>Email</label>
                     <div className="input-wrapper">
-                      <i className="fas fa-user"></i>
-                      <input name="email" type="email" placeholder="Enter your email" required />
+                      <i className="fas fa-envelope input-icon"></i>
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value={loginData.email}
+                        onChange={(e) =>
+                          setLoginData({ ...loginData, email: e.target.value })
+                        }
+                      />
                     </div>
                   </div>
 
                   <div className="form-group password-wrapper">
                     <label>Password</label>
                     <div className="input-wrapper">
-                      <input id="login-password" name="password" type="password" placeholder="Enter your password" required />
+                      <i className="fas fa-lock input-icon"></i>
+                      <input
+                        type="password"
+                        id="login-password"
+                        name="password"
+                        placeholder="Enter your password"
+                        value={loginData.password}
+                        onChange={(e) =>
+                          setLoginData({ ...loginData, password: e.target.value })
+                        }
+                      />
+
                       <span className="password-toggle" onClick={() => togglePassword("login-password")}>
                         <i className="fa fa-eye"></i>
                       </span>
@@ -178,34 +229,60 @@ export default function Auth() {
                   <button type="submit" className="login-btn">Login to Chitkara Diaries</button>
                 </form>
               ) : (
-                /* ---------------- REGISTER FORM ---------------- */
+                // ----------- REGISTER FORM -----------
                 <form className="login-form" onSubmit={handleRegister}>
+                  
                   <div className="form-header">
                     <h2>Create Account</h2>
                     <p>Sign up to get started</p>
                   </div>
 
+                  {/* FULL NAME */}
                   <div className="form-group">
                     <label>Full Name</label>
                     <div className="input-wrapper">
-                      <i className="fas fa-user"></i>
-                      <input name="fullname" type="text" placeholder="Enter your full name" required />
+                      <i className="fas fa-user input-icon"></i>
+                      <input
+                        type="text"
+                        name="fullname"
+                        placeholder="Enter your full name"
+                        value={registerData.fullname}
+                        onChange={(e) =>
+                          setRegisterData({ ...registerData, fullname: e.target.value })
+                        }
+                      />
                     </div>
                   </div>
 
+                  {/* ROLL */}
                   <div className="form-group">
                     <label>Roll Number</label>
                     <div className="input-wrapper">
-                      <i className="fas fa-id-card"></i>
-                      <input name="roll" type="text" placeholder="Enter roll number" required />
+                      <i className="fas fa-id-card input-icon"></i>
+                      <input
+                        type="text"
+                        name="roll"
+                        placeholder="Enter roll number"
+                        value={registerData.roll}
+                        onChange={(e) =>
+                          setRegisterData({ ...registerData, roll: e.target.value })
+                        }
+                      />
                     </div>
                   </div>
 
+                  {/* BATCH */}
                   <div className="form-group">
                     <label>Batch Year</label>
                     <div className="input-wrapper">
-                      <i className="fas fa-calendar"></i>
-                      <select name="batch" required defaultValue="">
+                      <i className="fas fa-calendar input-icon"></i>
+                      <select
+                        name="batch"
+                        value={registerData.batch}
+                        onChange={(e) =>
+                          setRegisterData({ ...registerData, batch: e.target.value })
+                        }
+                      >
                         <option value="" disabled>Select batch year</option>
                         <option value="2021">2021</option>
                         <option value="2022">2022</option>
@@ -215,11 +292,18 @@ export default function Auth() {
                     </div>
                   </div>
 
+                  {/* COURSE */}
                   <div className="form-group">
                     <label>Course</label>
                     <div className="input-wrapper">
-                      <i className="fas fa-graduation-cap"></i>
-                      <select name="course" required defaultValue="">
+                      <i className="fas fa-graduation-cap input-icon"></i>
+                      <select
+                        name="course"
+                        value={registerData.course}
+                        onChange={(e) =>
+                          setRegisterData({ ...registerData, course: e.target.value })
+                        }
+                      >
                         <option value="" disabled>Select your course</option>
                         <option value="B.Tech">B.Tech</option>
                         <option value="BCA">BCA</option>
@@ -229,18 +313,39 @@ export default function Auth() {
                     </div>
                   </div>
 
+                  {/* EMAIL */}
                   <div className="form-group">
                     <label>Email Address</label>
                     <div className="input-wrapper">
-                      <i className="fas fa-envelope"></i>
-                      <input name="email" type="email" placeholder="Enter your email" required />
+                      <i className="fas fa-envelope input-icon"></i>
+                      <input
+                        type="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        value={registerData.email}
+                        onChange={(e) =>
+                          setRegisterData({ ...registerData, email: e.target.value })
+                        }
+                      />
                     </div>
                   </div>
 
+                  {/* PASSWORD */}
                   <div className="form-group password-wrapper">
                     <label>Password</label>
                     <div className="input-wrapper">
-                      <input id="register-password" name="password" type="password" placeholder="Create your password" required />
+                      <i className="fas fa-lock input-icon"></i>
+                      <input
+                        type="password"
+                        id="register-password"
+                        name="password"
+                        placeholder="Create your password"
+                        value={registerData.password}
+                        onChange={(e) =>
+                          setRegisterData({ ...registerData, password: e.target.value })
+                        }
+                      />
+
                       <span className="password-toggle" onClick={() => togglePassword("register-password")}>
                         <i className="fa fa-eye"></i>
                       </span>
@@ -251,11 +356,14 @@ export default function Auth() {
                   <button type="submit" className="login-btn">Create Account</button>
                 </form>
               )}
+
             </div>
           </div>
+
         </div>
       </div>
 
+      {/* LOADER */}
       {loading && (
         <div id="loader" className="loader-overlay">
           <img src={loaderLogo} alt="Loading..." className="loader-logo" />

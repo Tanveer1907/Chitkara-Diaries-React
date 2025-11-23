@@ -187,7 +187,7 @@ body {
 
 .hero-image {
     overflow: hidden;
-    border-radius: 0 0 30px 30px;
+    border-radius: 18px 18px 18px 18px;
 }
 
 .hero-image img {

@@ -1,5 +1,7 @@
+import React, { useState } from "react";
 import "./osc.css";
 import MainNavbar from "../../components/navbar/main_navbar";
+
 import img1 from "../../assets/osc1.jpg";
 import img2 from "../../assets/osc2.jpg";
 import img3 from "../../assets/osc3.jpg";
@@ -10,22 +12,77 @@ import img7 from "../../assets/osc7.jpg";
 import openSourceVideo from "../../assets/openSouce.mp4";
 
 export default function Osc() {
+
+  // Form State
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    age: "",
+    preferred_team: "",
+    year: "",
+    skills: ""
+  });
+
+  const [message, setMessage] = useState("");
+
+  // Handle Input
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  // Handle Submit -> Backend
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMessage("Submitting...");
+
+    try {
+      const res = await fetch("http://localhost:5000/api/osc/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setMessage("Registration successful!");
+        setFormData({
+          first_name: "",
+          last_name: "",
+          email: "",
+          phone: "",
+          age: "",
+          preferred_team: "",
+          year: "",
+          skills: ""
+        });
+      } else {
+        setMessage(data.message || "Something went wrong.");
+      }
+    } catch (err) {
+      setMessage("Server error.");
+    }
+  };
+
   return (
     <>
       <MainNavbar />
-
+      <div className="top-gap"></div>
       {/* Moving Images */}
       <div className="moving-images-container">
         <div className="moving-strip">
-            <div className="moving-image"><img src={img1} alt="img1" /></div>
-            <div className="moving-image"><img src={img2} alt="img2" /></div>
-            <div className="moving-image"><img src={img3} alt="img3" /></div>
-            <div className="moving-image"><img src={img4} alt="img4" /></div>
-            <div className="moving-image"><img src={img5} alt="img5" /></div>
-            <div className="moving-image"><img src={img6} alt="img6" /></div>
-            <div className="moving-image"><img src={img7} alt="img7" /></div>
-
-
+          <div className="moving-image"><img src={img1} alt="img1" /></div>
+          <div className="moving-image"><img src={img2} alt="img2" /></div>
+          <div className="moving-image"><img src={img3} alt="img3" /></div>
+          <div className="moving-image"><img src={img4} alt="img4" /></div>
+          <div className="moving-image"><img src={img5} alt="img5" /></div>
+          <div className="moving-image"><img src={img6} alt="img6" /></div>
+          <div className="moving-image"><img src={img7} alt="img7" /></div>
         </div>
       </div>
 
@@ -52,19 +109,17 @@ export default function Osc() {
           <p>
             Whether you are a beginner exploring your first line of code or a seasoned
             developer contributing to large projects, OSC is the place where you can grow,
-            network, and make an impact. Together, we are building a future powered by
-            knowledge, collaboration, and open-source spirit.
+            network, and make an impact.
           </p>
         </div>
 
         <div className="about-image">
-            <div className="basketball-court">
-             <video autoPlay muted loop playsInline>
-                <source src={openSourceVideo} type="video/mp4" />
+          <div className="basketball-court">
+            <video autoPlay muted loop playsInline>
+              <source src={openSourceVideo} type="video/mp4" />
             </video>
-         </div>
+          </div>
         </div>
-
       </div>
 
       {/* Achievements + Registration */}
@@ -77,7 +132,7 @@ export default function Osc() {
             <div className="timeline-content">
               <h3>🏆 Smart India Hackathon</h3>
               <span className="tag">National</span>
-              <p>Winners in Software Category, representing CU at the national level.</p>
+              <p>Winners in Software Category.</p>
             </div>
           </div>
 
@@ -85,7 +140,7 @@ export default function Osc() {
             <div className="timeline-content">
               <h3>🌍 Google Summer of Code</h3>
               <span className="tag">International</span>
-              <p>3 students selected as open-source contributors in global projects.</p>
+              <p>3 students selected as contributors.</p>
             </div>
           </div>
         </div>
@@ -94,92 +149,101 @@ export default function Osc() {
         <div className="registration-container">
           <h2>Join Our Team</h2>
 
-          <form id="registrationForm">
+          <form onSubmit={handleSubmit}>
             <div className="form-grid">
 
               <div className="form-group">
-                <input type="text" placeholder=" " required />
+                <input name="first_name" value={formData.first_name} onChange={handleChange} type="text" required placeholder=" " />
                 <label>First Name *</label>
               </div>
 
               <div className="form-group">
-                <input type="text" placeholder=" " required />
+                <input name="last_name" value={formData.last_name} onChange={handleChange} type="text" required placeholder=" " />
                 <label>Last Name *</label>
               </div>
 
               <div className="form-group">
-                <input type="email" placeholder=" " required />
-                <label>Email Address *</label>
+                <input name="email" value={formData.email} onChange={handleChange} type="email" required placeholder=" " />
+                <label>Email *</label>
               </div>
 
               <div className="form-group">
-                <input type="tel" placeholder=" " required />
-                <label>Phone Number *</label>
+                <input name="phone" value={formData.phone} onChange={handleChange} type="tel" required placeholder=" " />
+                <label>Phone *</label>
               </div>
 
               <div className="form-group">
-                <input type="number" placeholder=" " min="12" max="35" required />
+                <input name="age" value={formData.age} onChange={handleChange} type="number" required placeholder=" " />
                 <label>Age *</label>
               </div>
 
               <div className="form-group">
-                <select>
+                <select name="preferred_team" value={formData.preferred_team} onChange={handleChange}>
                   <option hidden></option>
-                  <option value="orgamizing-team">Organizing Team</option>
-                  <option value="media-team">Media Team</option>
-                  <option value="graphics-team">Graphics Team</option>
-                  <option value="discipline-team">Discipline Team</option>
-                  <option value="technical-team">Technical Team</option>
-                  <option value="content-team">Content Team</option>
-                  <option value="promotion-team">Promotion Team</option>
+                  <option value="organizing">Organizing Team</option>
+                  <option value="media">Media Team</option>
+                  <option value="graphics">Graphics Team</option>
+                  <option value="discipline">Discipline Team</option>
+                  <option value="technical">Technical Team</option>
+                  <option value="content">Content Team</option>
+                  <option value="promotion">Promotion Team</option>
                 </select>
                 <label>Preferred Team</label>
               </div>
 
               <div className="form-group">
-                <select required>
+                <select name="year" value={formData.year} onChange={handleChange} required>
                   <option hidden></option>
-                  <option value="first">1st Year</option>
-                  <option value="second">2nd Year</option>
-                  <option value="third">3rd Year</option>
-                  <option value="fourth">4th Year</option>
+                  <option value="1st">1st Year</option>
+                  <option value="2nd">2nd Year</option>
+                  <option value="3rd">3rd Year</option>
+                  <option value="4th">4th Year</option>
                 </select>
                 <label>Year *</label>
               </div>
 
               <div className="form-group full-width">
-                <textarea placeholder=" "></textarea>
+                <textarea name="skills" value={formData.skills} onChange={handleChange} placeholder=" "></textarea>
                 <label>Skills</label>
               </div>
+
             </div>
 
             <button type="submit" className="submit-btn">Register</button>
+
+            {message && <p className="form-message">{message}</p>}
           </form>
         </div>
+
       </div>
 
       {/* Footer */}
-      <footer className="site-footer">
-        <div className="footer-container">
+      <footer className="clean-footer">
+  <div className="footer-left">
+    <h3>Open Source Team Coordinator</h3>
+    <p><strong>Name:</strong> Prateek Sharma</p>
+    <p><strong>Phone:</strong> +91 98765 43820</p>
+    <p><strong>Email:</strong> prateek.sharma@chitkara.edu.in</p>
+  </div>
 
-          <div className="footer-info">
-            <h3>Open Source Team Coordinator</h3>
-            <p><strong>Name:</strong> Prateek Sharma</p>
-            <p><strong>Phone:</strong> +91 98765 43820</p>
-            <p><strong>Email:</strong> prateek.sharma@chitkara.edu.in</p>
-          </div>
+  <div className="footer-right">
+    <h3>Connect with Chitkara University</h3>
+    <div className="footer-icons">
+      <a href="https://www.linkedin.com/school/chitkara-university/" className="linkedin" target="_blank">
+        <i className="fab fa-linkedin"></i>
+      </a>
 
-          <div className="footer-social">
-            <h3>Connect with Chitkara University</h3>
-            <div className="social-icons">
-              <a href="https://www.linkedin.com/school/chitkara-university/" target="_blank"><i className="fab fa-linkedin-in"></i></a>
-              <a href="https://www.instagram.com/chitkarau" target="_blank"><i className="fab fa-instagram"></i></a>
-              <a href="https://youtube.com/@chitkarauniversity" target="_blank"><i className="fab fa-youtube"></i></a>
-            </div>
-          </div>
+      <a href="https://www.instagram.com/chitkarau" className="instagram" target="_blank">
+        <i className="fab fa-instagram"></i>
+      </a>
 
-        </div>
-      </footer>
+      <a href="https://youtube.com/@chitkarauniversity" className="youtube" target="_blank">
+        <i className="fab fa-youtube"></i>
+      </a>
+    </div>
+  </div>
+</footer>
+
     </>
   );
 }
