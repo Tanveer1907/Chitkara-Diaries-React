@@ -13,39 +13,6 @@ Chitkara Diaries is an interactive, student-focused web platform built with Reac
 - Basic login flow for personalized interactions
 - Contact page / feedback form
 
----
-
-## Project Structure
-
-```
-src/
-  pages/
-    Hero.jsx
-    Journals.jsx
-    Polls.jsx
-    Clubs.jsx
-    ClubDetail.jsx
-    Login.jsx
-    Contact.jsx
-
-  components/
-    ClubCard.jsx
-    ClubModal.jsx
-    JournalCard.jsx
-    PollCard.jsx
-    VoteBar.jsx
-    ReviewList.jsx
-    ReviewForm.jsx
-    Map360.jsx
-    VideoGallery.jsx
-    ApplyForm.jsx
-
-  assets/
-    images/  (store .png/.jpg icons)
-    videos/
-```
-
----
 
 ## Tech Stack
 
