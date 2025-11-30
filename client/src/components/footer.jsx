@@ -15,8 +15,8 @@ export default function Footer() {
             <ul>
               <a href="#top">Home</a><br></br>
               <a href="#about-us-section">About Us</a><br></br>
-              <a href="/club_page.html">Clubs</a><br></br>
-              <a href="/journal.html">Journal</a><br></br>
+              <a href="/clubs">Clubs</a><br></br>
+              <a href="/journal">Journal</a><br></br>
             </ul>
           </div>
           <div className="footer-section">

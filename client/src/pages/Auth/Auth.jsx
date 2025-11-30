@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import AuthNavbar from "../../components/navbar/authnavbar";
 import "./auth.css";
-import loaderLogo from "../../assets/chitkara.jpg";
+import loaderLogo from "../../assets/logo.jpg";
 
 export default function Auth() {
   const [showLogin, setShowLogin] = useState(true);
@@ -49,6 +49,8 @@ export default function Auth() {
       setTimeout(() => {
         setLoading(false);
         if (data.success) {
+          // Save user to localStorage
+          localStorage.setItem("user", JSON.stringify(data.user));
           window.location.href = "/";
         } else {
           setLoginError(data.message || "Incorrect email or password");
@@ -154,7 +156,7 @@ export default function Auth() {
           {/* RIGHT FORM SECTION */}
           <div className="login-form-section">
             <div className="form-container">
-              
+
               <div className="tab-nav">
                 <button
                   className={showLogin ? "active" : ""}
@@ -182,7 +184,7 @@ export default function Auth() {
               {/* ----------- LOGIN FORM ----------- */}
               {showLogin ? (
                 <form className="login-form" onSubmit={handleLogin}>
-                  
+
                   <div className="form-header">
                     <h2>Student Login</h2>
                     <p>Enter your details to access your account</p>
@@ -231,7 +233,7 @@ export default function Auth() {
               ) : (
                 // ----------- REGISTER FORM -----------
                 <form className="login-form" onSubmit={handleRegister}>
-                  
+
                   <div className="form-header">
                     <h2>Create Account</h2>
                     <p>Sign up to get started</p>
