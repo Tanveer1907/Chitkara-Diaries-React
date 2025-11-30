@@ -18,6 +18,9 @@ export default function HeroSection() {
                 Explore Campus
               </a>
             </div>
+            <div className="scroll-indicator" onClick={() => document.getElementById('campus-map').scrollIntoView({ behavior: 'smooth' })}>
+              <i className="fas fa-chevron-down"></i>
+            </div>
           </div>
         </div>
       </div>

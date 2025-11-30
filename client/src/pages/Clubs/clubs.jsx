@@ -1,7 +1,7 @@
-// client/src/pages/Clubs/clubs.jsx
 import React from "react";
 import "./clubs.css";
 import MainNavbar from "../../components/navbar/main_navbar";
+import Footer from "../../components/footer";
 
 // import images from src/assets
 import oscImg from "../../assets/OSC.png";
@@ -18,7 +18,7 @@ export default function Clubs() {
 
       {/* Page header */}
       <header className="page-header">
-        <h1>Get to know the various clubs in Chitkara Uni</h1>
+        <h1>Discover Amazing Clubs at Chitkara University</h1>
       </header>
 
       {/* Technical Clubs */}
@@ -29,7 +29,7 @@ export default function Clubs() {
             <img src={oscImg} alt="Open Source Chandigarh" />
             <div className="card-content">
               <h3>Open-Source Chandigarh</h3>
-              <p>Learn, foster, explore — Open-Source is fun.</p>
+              <p>Join the community of developers, contribute to open-source projects, and build innovative solutions together.</p>
               <a className="know-more" href="/osc">Know More</a>
             </div>
           </div>
@@ -38,7 +38,7 @@ export default function Clubs() {
             <img src={ieeeImg} alt="IEEE CUIET" />
             <div className="card-content">
               <h3>IEEE CUIET</h3>
-              <p>Learn, build and showcase new ideas.</p>
+              <p>Enhance your technical skills through workshops, hackathons, and industry networking opportunities.</p>
               <a className="know-more" href="/ieee">Know More</a>
             </div>
           </div>
@@ -53,7 +53,7 @@ export default function Clubs() {
             <img src={basketballImg} alt="Basketball Club" />
             <div className="card-content">
               <h3>Basketball Club CUIET</h3>
-              <p>The Chitkara Basketball Team.</p>
+              <p>Dribble your way to excellence! Join our competitive team and showcase your basketball prowess.</p>
               <a className="know-more" href="/basketball">Know More</a>
             </div>
           </div>
@@ -62,7 +62,7 @@ export default function Clubs() {
             <img src={cricketImg} alt="Cricket Club" />
             <div className="card-content">
               <h3>Cricket Mania CUIET</h3>
-              <p>Build fitness, teamwork and spirit.</p>
+              <p>Master the gentleman's game while building teamwork, fitness, and championship-winning strategies.</p>
               <a className="know-more" href="/cricket">Know More</a>
             </div>
           </div>
@@ -77,7 +77,7 @@ export default function Clubs() {
             <img src={natrajImg} alt="Natraj" />
             <div className="card-content">
               <h3>C2S2 Natraj</h3>
-              <p>Dive into the world of Classical Dance.</p>
+              <p>Experience the grace and beauty of classical dance. Perfect your art and perform on grand stages.</p>
               <a className="know-more" href="/natraj">Know More</a>
             </div>
           </div>
@@ -86,15 +86,15 @@ export default function Clubs() {
             <img src={panacheImg} alt="Panache" />
             <div className="card-content">
               <h3>C2S2 Panache</h3>
-              <p>Chitkara's fashion world.</p>
+              <p>Express your creativity through fashion. Design, model, and bring style to life at Chitkara's premier fashion club.</p>
               <a className="know-more" href="/panache">Know More</a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Simple placeholder footer */}
-      <div style={{ height: 1 }} />
+      {/* Footer */}
+      <Footer />
     </>
   );
 }
