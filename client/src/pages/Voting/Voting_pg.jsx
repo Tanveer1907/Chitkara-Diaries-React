@@ -25,16 +25,19 @@ function getDefaultColors() {
   return ["#ff6b6b", "#c00000", "#9a1f1f", "#ff2b4f", "#621414", "#0b66ff", "#f57c7c", "#f5b7b7"];
 }
 
-function PieChartSmall({ dataMap, title, onHoverOption, hoveredOption, colors }) {
+function PieChartSmall({ dataMap, title, onHoverOption, hoveredOption, colors, style }) {
   const entries = Object.entries(dataMap).filter(([k, v]) => v > 0);
   const total = entries.reduce((s, [, v]) => s + v, 0);
 
   const sorted = entries.sort((a, b) => b[1] - a[1]);
-  const top = sorted.slice(0, 5);
+  const top = sorted.slice(5);
   const others = sorted.slice(5);
   const othersCount = others.reduce((s, [, v]) => s + v, 0);
 
-  const final = top.map(([k, v]) => ({ key: k, value: v }));
+  // Fix: top should be slice(0, 5)
+  const top5 = sorted.slice(0, 5);
+
+  const final = top5.map(([k, v]) => ({ key: k, value: v }));
   if (othersCount > 0) final.push({ key: "Others", value: othersCount });
 
   const computed = final.length > 0 ? final : [{ key: "No votes yet", value: 1 }];
@@ -74,7 +77,7 @@ function PieChartSmall({ dataMap, title, onHoverOption, hoveredOption, colors })
   });
 
   return (
-    <div className="cat-pie-card">
+    <div className="cat-pie-card animate-fade-in-up" style={style}>
       <div className="cat-pie-header">
         <h4>{title}</h4>
         <div className="cat-pie-total">{total} votes</div>
@@ -395,91 +398,7 @@ export default function VotingPg() {
   const flatReviews = useMemo(() => (Array.isArray(reviews) ? reviews : Object.values(reviews).flat()), [reviews]);
   const hoverImageSrc = hoveredOption ? imageMap[hoveredOption] || "/src/assets/default_place.jpg" : null;
 
-  // ---------- Menu visibility: show after preview / while in voting section ----------
-  const [chartsVisible, setChartsVisible] = useState(true); // top charts+preview visible initially
-  const [votingInView, setVotingInView] = useState(false);
-  const menuRef = useRef(null);
-
-  useEffect(() => {
-    const chartsTop = document.querySelector(".charts-top");
-    const chartsPreview = document.querySelector(".charts-preview-under");
-    const votingEl = document.querySelector(".voting-section");
-
-    if (!votingEl) return;
-
-    // initial check (in case elements are on screen at route load)
-    const initialCheck = () => {
-      let anyVisible = false;
-      [chartsTop, chartsPreview].forEach((el) => {
-        if (!el) return;
-        const rect = el.getBoundingClientRect();
-        if (rect.bottom > 0 && rect.top < window.innerHeight) anyVisible = true;
-      });
-      setChartsVisible(anyVisible);
-
-      if (votingEl) {
-        const rectV = votingEl.getBoundingClientRect();
-        setVotingInView(rectV.bottom > 0 && rectV.top < window.innerHeight && rectV.height > 0);
-      }
-    };
-
-    initialCheck();
-
-    // observe chartsTop and chartsPreview: if either intersects, consider charts area visible
-    const chartsObserver = new IntersectionObserver(
-      (entries) => {
-        // If any entries are intersecting, set chartsVisible true
-        const any = entries.some((ent) => ent.isIntersecting && ent.intersectionRatio > 0);
-        if (any) {
-          setChartsVisible(true);
-          return;
-        }
-
-        // If none intersect according to observer, double-check bounding rects
-        let stillVisible = false;
-        [chartsTop, chartsPreview].forEach((el) => {
-          if (!el) return;
-          const r = el.getBoundingClientRect();
-          if (r.bottom > 0 && r.top < window.innerHeight) stillVisible = true;
-        });
-        setChartsVisible(stillVisible);
-      },
-      { root: null, threshold: [0, 0.01, 0.05, 0.25] }
-    );
-
-    if (chartsTop) chartsObserver.observe(chartsTop);
-    if (chartsPreview) chartsObserver.observe(chartsPreview);
-
-    // voting observer: mark voting section in view when ~10% visible
-    const votingObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          setVotingInView(entry.intersectionRatio >= 0.10);
-        });
-      },
-      { root: null, threshold: [0, 0.05, 0.1, 0.25] }
-    );
-    votingObserver.observe(votingEl);
-
-    // scroll/resize fallback to correct edge cases
-    const onScrollResize = () => {
-      initialCheck();
-    };
-    window.addEventListener("scroll", onScrollResize, { passive: true });
-    window.addEventListener("resize", onScrollResize);
-
-    return () => {
-      chartsObserver.disconnect();
-      votingObserver.disconnect();
-      window.removeEventListener("scroll", onScrollResize);
-      window.removeEventListener("resize", onScrollResize);
-    };
-  }, []);
-
-  // menu visible when voting section is in view AND charts area is NOT visible
-  const menuVisible = votingInView && !chartsVisible;
-
-  // ---------- end menu visibility logic ----------
+  // ---------- Menu visibility logic removed (handled by CSS sticky) ----------
 
   // preview summary content derived from 'summaries' map + live counts
   const PreviewSummary = ({ option }) => {
@@ -513,9 +432,7 @@ export default function VotingPg() {
           {s.why ? <span className="meta-divider">•</span> : null}
           {s.why ? <span className="preview-why">{s.why}</span> : null}
         </div>
-        <div style={{ marginTop: "auto", color: "#666", fontSize: "0.9rem" }}>
-          Tip: Click the corresponding card in the Voting section below to cast your vote.
-        </div>
+
       </>
     );
   };
@@ -526,15 +443,15 @@ export default function VotingPg() {
       <div id="top" style={{ paddingTop: 0 }}></div>
 
       <div className="main">
-        {/* LEFT: content (charts + content-row) */}
-        <div className="main-content-wrapper">
-
-          {/* TOP charts area (grid that allows preview to span) */}
+        {/* TOP charts area (grid that allows preview to span) */}
+        {/* TOP DASHBOARD: Charts + Preview Side-by-Side */}
+        <div className="top-dashboard-grid">
+          {/* Charts Section */}
           <section className="charts-top">
             <h2 className="charts-heading">Trending picks — see what others like</h2>
 
             <div className="charts-grid">
-              {categories.map((cat) => (
+              {categories.map((cat, index) => (
                 <PieChartSmall
                   key={cat.key}
                   dataMap={categoryCounts[cat.key] || {}}
@@ -542,444 +459,455 @@ export default function VotingPg() {
                   onHoverOption={setHoveredOption}
                   hoveredOption={hoveredOption}
                   colors={colors}
+                  style={{ animationDelay: `${index * 0.1}s` }}
                 />
               ))}
             </div>
+          </section>
 
-            <div className="charts-preview-under">
-              <div className="preview-box-top">
-                <div className="preview-left">
-                  {hoverImageSrc ? (
-                    <img src={hoverImageSrc} alt={hoveredOption || "preview"} className="preview-img-top" />
-                  ) : (
-                    <div className="preview-empty-top">Hover a slice or name to preview</div>
-                  )}
-                  <div className="preview-caption-top">{hoveredOption || "No selection"}</div>
-                </div>
-
-                <div className="preview-right">
-                  {/* show summary when hoveredOption exists */}
-                  <PreviewSummary option={hoveredOption} />
-                </div>
+          {/* Preview Section */}
+          <section className="preview-section-top animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            <div className="preview-box-top-content">
+              <div className="preview-img-container-top">
+                {hoverImageSrc ? (
+                  <img src={hoverImageSrc} alt={hoveredOption || "preview"} className="preview-img-top" />
+                ) : (
+                  <div className="preview-empty-top">Hover a slice to preview</div>
+                )}
+              </div>
+              <div className="preview-info-top">
+                <div className="preview-caption-top">{hoveredOption || "Select an option"}</div>
+                <PreviewSummary option={hoveredOption} />
               </div>
             </div>
           </section>
-
-          {/* Voting Section heading */}
-          <section className="voting-section">
-            <h2 className="voting-heading">Voting Section</h2>
-          </section>
-
-          {/* CONTENT ROW: left = voting menu, right = voting cards */}
-          <div className="content-row">
-            {/* left column: menu will be rendered but visibility controlled by classes */}
-            <div className="left-col">
-              <div
-                ref={menuRef}
-                className={`hamburger-menu ${menuVisible ? "visible-in-voting" : "hidden-while-charts"}`}
-                aria-hidden={!menuVisible}
-              >
-                <div className="menu-header">
-                  <i className="fas fa-bars"></i>
-                  <span>Voting Menu</span>
-                </div>
-                <div className="hamburger-links">
-                  <a href="#fav-place-domain" className="hamburger-link"><i className="fas fa-map-marker-alt"></i><span>Fav Place</span></a>
-                  <a href="#hangout-domain" className="hamburger-link"><i className="fas fa-users"></i><span>Hangout</span></a>
-                  <a href="#food-domain" className="hamburger-link"><i className="fas fa-utensils"></i><span>Food</span></a>
-                  <a href="#events-domain" className="hamburger-link"><i className="fas fa-calendar-alt"></i><span>Events</span></a>
-                  <a href="#clubs-domain" className="hamburger-link"><i className="fas fa-music"></i><span>Clubs</span></a>
-                  <a href="#sports-domain" className="hamburger-link"><i className="fas fa-futbol"></i><span>Sports</span></a>
-                  <a href="#library-domain" className="hamburger-link"><i className="fas fa-book"></i><span>Library</span></a>
-                  <a href="#hostel-domain" className="hamburger-link"><i className="fas fa-bed"></i><span>Hostel</span></a>
-                  <a href="#memories-domain" className="hamburger-link"><i className="fas fa-star"></i><span>Memories</span></a>
-                </div>
-              </div>
-            </div>
-
-            {/* right column: voting cards */}
-            <div className="right-col">
-              <div className="questions-grid">
-                {/* --- All your original domain sections and cards preserved below (unchanged) --- */}
-
-                {/* Domain: Favorite Place */}
-                <div className="domain-section" id="fav-place-domain" style={{ marginTop: "0.5rem" }}>
-                  <div className="domain-title">Favorite Place</div>
-                  <div className="domain-cards">
-                    <div className="card">
-                      <h3>What is your most favorite place to visit in Chitkara University?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q1" value="Square 1" /> Square 1</label>
-                        <label><input type="radio" name="q1" value="Library" /> Library</label>
-                        <label><input type="radio" name="q1" value="Sportorium" /> Sportorium</label>
-                        <label><input type="radio" name="q1" value="Other" /> Other</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Which is the most photogenic spot on campus?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q2" value="Alpha Zone" /> Alpha Zone</label>
-                        <label><input type="radio" name="q2" value="Hostel Road" /> Hostel Road</label>
-                        <label><input type="radio" name="q2" value="Exploretorium" /> Exploretorium</label>
-                        <label><input type="radio" name="q2" value="Other" /> Other</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Where do you go for peace and quiet?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q3" value="Library" /> Library</label>
-                        <label><input type="radio" name="q3" value="Alpha Zone" /> Alpha Zone</label>
-                        <label><input type="radio" name="q3" value="Temple" /> Temple</label>
-                        <label><input type="radio" name="q3" value="Hostel Room" /> Hostel Room</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-
-
-                  </div>
-                </div>
-
-                {/* Domain: Hangout */}
-                <div className="domain-section" id="hangout-domain">
-                  <div className="domain-title">Hangout</div>
-                  <div className="domain-cards">
-                    <div className="card">
-                      <h3>Favorite place to hangout with friends?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q4" value="Subway" /> Subway</label>
-                        <label><input type="radio" name="q4" value="Square 1" /> Square 1 </label>
-                        <label><input type="radio" name="q4" value="Hostel Common Room" /> Hostel Common Room</label>
-                        <label><input type="radio" name="q4" value="Other" /> Other</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Where do you spend most of your free time?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q5" value="Hostel" /> Hostel</label>
-                        <label><input type="radio" name="q5" value="Square 1" /> Square 1</label>
-                        <label><input type="radio" name="q5" value="Library" /> Library</label>
-                        <label><input type="radio" name="q5" value="Sports Ground" /> Sports Ground</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Best place for group study?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q6" value="Library" /> Library</label>
-                        <label><input type="radio" name="q6" value="Hostel Room" /> Hostel Room</label>
-                        <label><input type="radio" name="q6" value="Square 1" /> Square 1</label>
-                        <label><input type="radio" name="q6" value="CSE Block" /> CSE Block</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Domain: Food */}
-                <div className="domain-section" id="food-domain">
-                  <div className="domain-title">Food</div>
-                  <div className="domain-cards">
-                    <div className="card">
-                      <h3>Best food spot on campus?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q7" value="Square 1" /> Square 1</label>
-                        <label><input type="radio" name="q7" value="Square 2" /> Square 2</label>
-                        <label><input type="radio" name="q7" value="Subway" /> Subway </label>
-                        <label><input type="radio" name="q7" value="First Coffee" /> First Coffee</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Favorite snack at Chitkara?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q8" value="Maggi" /> Maggi</label>
-                        <label><input type="radio" name="q8" value="Sandwich" /> Sandwich</label>
-                        <label><input type="radio" name="q8" value="Chaat" /> Chaat</label>
-                        <label><input type="radio" name="q8" value="Pasta" /> Pasta</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Where do you get the best coffee?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q9" value="Dohful" /> Dohful</label>
-                        <label><input type="radio" name="q9" value="Chai Nagri" /> Chai Nagri</label>
-                        <label><input type="radio" name="q9" value="First Coffee" /> First Coffee</label>
-                        <label><input type="radio" name="q9" value="Hostel Mess" /> Hostel Mess</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Domain: Events */}
-                <div className="domain-section" id="events-domain">
-                  <div className="domain-title">Events</div>
-                  <div className="domain-cards">
-                    <div className="card">
-                      <h3>Which event do you enjoy the most?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q10" value="Freshers'" /> Freshers'</label>
-                        <label><input type="radio" name="q10" value="Rangrezz" /> Rangrezz</label>
-                        <label><input type="radio" name="q10" value="Sports Fest" /> Sports Fest</label>
-                        <label><input type="radio" name="q10" value="Other" /> Other</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Which event has the best food stalls?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q11" value="Rangrezz" /> Rangrezz</label>
-                        <label><input type="radio" name="q11" value="Sports Fest" /> Sports Fest</label>
-                        <label><input type="radio" name="q11" value="Hostel Night" /> Hostel Night</label>
-                        <label><input type="radio" name="q11" value="Other" /> Other</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Which event do you participate in the most?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q12" value="Sports Fest" /> Sports Fest</label>
-                        <label><input type="radio" name="q12" value="Freshers'" /> Freshers'</label>
-                        <label><input type="radio" name="q12" value="Hostel Night" /> Hostel Night</label>
-                        <label><input type="radio" name="q12" value="None" /> None</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Domain: Clubs */}
-                <div className="domain-section" id="clubs-domain">
-                  <div className="domain-title">Clubs</div>
-                  <div className="domain-cards">
-                    <div className="card">
-                      <h3>Which club is your favorite?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q13" value="Music Club" /> Music Club</label>
-                        <label><input type="radio" name="q13" value="Dance Club" /> Dance Club</label>
-                        <label><input type="radio" name="q13" value="Coding Club" /> Coding Club</label>
-                        <label><input type="radio" name="q13" value="Drama Club" /> Drama Club</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Which club organizes the best events?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q14" value="Music Club" /> Music Club</label>
-                        <label><input type="radio" name="q14" value="Dance Club" /> Dance Club</label>
-                        <label><input type="radio" name="q14" value="Coding Club" /> Coding Club</label>
-                        <label><input type="radio" name="q14" value="Drama Club" /> Drama Club</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Which club would you like to join?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q15" value="Music Club" /> Music Club</label>
-                        <label><input type="radio" name="q15" value="Dance Club" /> Dance Club</label>
-                        <label><input type="radio" name="q15" value="Coding Club" /> Coding Club</label>
-                        <label><input type="radio" name="q15" value="Drama Club" /> Drama Club</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Domain: Sports, Library, Hostel, Memories preserved below unchanged */}
-                <div className="domain-section" id="sports-domain">
-                  <div className="domain-title">Sports</div>
-                  <div className="domain-cards">
-                    <div className="card">
-                      <h3>Favorite sport to play at Chitkara?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q16" value="Football" /> Football</label>
-                        <label><input type="radio" name="q16" value="Basketball" /> Basketball</label>
-                        <label><input type="radio" name="q16" value="Cricket" /> Cricket</label>
-                        <label><input type="radio" name="q16" value="Badminton" /> Badminton</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Which sport do you watch the most?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q17" value="Football" /> Football</label>
-                        <label><input type="radio" name="q17" value="Basketball" /> Basketball</label>
-                        <label><input type="radio" name="q17" value="Cricket" /> Cricket</label>
-                        <label><input type="radio" name="q17" value="Volleyball" /> Volleyball</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Which sport would you like to see more events for?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q18" value="Football" /> Football</label>
-                        <label><input type="radio" name="q18" value="Basketball" /> Basketball</label>
-                        <label><input type="radio" name="q18" value="Cricket" /> Cricket</label>
-                        <label><input type="radio" name="q18" value="Pickleball" /> Pickleball</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="domain-section" id="library-domain">
-                  <div className="domain-title">Library</div>
-                  <div className="domain-cards">
-                    <div className="card">
-                      <h3>How often do you visit the library?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q19" value="Daily" />Daily</label>
-                        <label><input type="radio" name="q19" value="Weekly" /> Weekly</label>
-                        <label><input type="radio" name="q19" value="Rarely" /> Rarely</label>
-                        <label><input type="radio" name="q19" value="Never" /> Never</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Favorite spot in the library?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q20" value="Reading Room" /> Reading Room</label>
-                        <label><input type="radio" name="q20" value="Computer Section" /> Computer Section</label>
-                        <label><input type="radio" name="q20" value="Group Study Area" /> Group Study Area</label>
-                        <label><input type="radio" name="q20" value="Stacks" /> Stacks</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>What do you use the library for most?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q21" value="Study" /> Study</label>
-                        <label><input type="radio" name="q21" value="Group Work" /> Group Work</label>
-                        <label><input type="radio" name="q21" value="Research" /> Research</label>
-                        <label><input type="radio" name="q21" value="Reading Novels" /> Reading Novels</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="domain-section" id="hostel-domain">
-                  <div className="domain-title">Hostel</div>
-                  <div className="domain-cards">
-                    <div className="card">
-                      <h3>Best thing about hostel life?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q22" value="Friends" /> Friends</label>
-                        <label><input type="radio" name="q22" value="Food" /> Food</label>
-                        <label><input type="radio" name="q22" value="Freedom" /> Freedom</label>
-                        <label><input type="radio" name="q22" value="Events" /> Events</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>What do you miss most about hostel during holidays?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q23" value="Friends" /> Friends</label>
-                        <label><input type="radio" name="q23" value="Hostel Food" /> Hostel Food</label>
-                        <label><input type="radio" name="q23" value="Hostel Events" /> Hostel Events</label>
-                        <label><input type="radio" name="q23" value="Nothing" /> Nothing</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Favorite hostel event?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q24" value="Hostel Night" /> Hostel Night</label>
-                        <label><input type="radio" name="q24" value="DJ Night" /> DJ Night</label>
-                        <label><input type="radio" name="q24" value="Sports" /> Sports</label>
-                        <label><input type="radio" name="q24" value="Other" /> Other</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="domain-section" id="memories-domain">
-                  <div className="domain-title">Memories</div>
-                  <div className="domain-cards">
-                    <div className="card">
-                      <h3>Your most memorable moment at Chitkara?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q25" value="First Day" /> First Day</label>
-                        <label><input type="radio" name="q25" value="Fests" /> Fests</label>
-                        <label><input type="radio" name="q25" value="Hostel Nights" /> Hostel Nights</label>
-                        <label><input type="radio" name="q25" value="Other" /> Other</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Best memory with friends?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q26" value="Group Study" /> Group Study</label>
-                        <label><input type="radio" name="q26" value="Night Outs" /> Night Outs</label>
-                        <label><input type="radio" name="q26" value="Hostel Fun" /> Hostel Fun</label>
-                        <label><input type="radio" name="q26" value="Trips" /> Trips</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-
-                    <div className="card">
-                      <h3>Which moment would you relive?</h3>
-                      <div className="options">
-                        <label><input type="radio" name="q27" value="First Day" /> First Day</label>
-                        <label><input type="radio" name="q27" value="Fests" /> Fests</label>
-                        <label><input type="radio" name="q27" value="Hostel Nights" /> Hostel Nights</label>
-                        <label><input type="radio" name="q27" value="Other" /> Other</label>
-                      </div>
-                      <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
         </div>
 
-        {/* RIGHT: review panel stays sticky */}
-        <aside className="review-panel" id="reviewPanel">
-          <div className="review-header">
-            <h3><i className="fas fa-comments"></i> Recent Reviews</h3>
-            <button className="add-review-btn-header" onClick={() => setIsModalOpen(true)}>
-              <i className="fas fa-plus"></i> Add Review
-            </button>
-          </div>
-          <div className="review-content">
-            {flatReviews.length === 0 ? (
-              <p className="no-reviews">No reviews yet. Be the first!</p>
-            ) : (
-              flatReviews.map((rev, index) => (
-                <div key={index} className="review-card">
-                  <p className="review-text">"{rev.text}"</p>
-                  <span className="review-option">Re: <strong>{rev.optionName}</strong></span>
-                  <span className="review-author">- {rev.author}</span>
+        {/* BOTTOM: Grid Layout */}
+        <div className="main-grid">
+          <div className="left-content-wrapper">
+
+            {/* Voting Section heading */}
+            <section className="voting-section">
+              <h2 className="voting-heading">Voting Section</h2>
+            </section>
+
+            {/* CONTENT ROW: left = voting menu, right = voting cards */}
+            <div className="content-row">
+              {/* left column: menu will be rendered but visibility controlled by classes */}
+              <div className="left-col">
+                <div
+                  className="hamburger-menu animate-fade-in-up"
+                  style={{ animationDelay: '0.5s' }}
+                >
+                  <div className="menu-header">
+                    <i className="fas fa-bars"></i>
+                    <span>Voting Menu</span>
+                  </div>
+                  <div className="hamburger-links">
+                    <a href="#fav-place-domain" className="hamburger-link"><i className="fas fa-map-marker-alt"></i><span>Fav Place</span></a>
+                    <a href="#hangout-domain" className="hamburger-link"><i className="fas fa-users"></i><span>Hangout</span></a>
+                    <a href="#food-domain" className="hamburger-link"><i className="fas fa-utensils"></i><span>Food</span></a>
+                    <a href="#events-domain" className="hamburger-link"><i className="fas fa-calendar-alt"></i><span>Events</span></a>
+                    <a href="#clubs-domain" className="hamburger-link"><i className="fas fa-music"></i><span>Clubs</span></a>
+                    <a href="#sports-domain" className="hamburger-link"><i className="fas fa-futbol"></i><span>Sports</span></a>
+                    <a href="#library-domain" className="hamburger-link"><i className="fas fa-book"></i><span>Library</span></a>
+                    <a href="#hostel-domain" className="hamburger-link"><i className="fas fa-bed"></i><span>Hostel</span></a>
+                    <a href="#memories-domain" className="hamburger-link"><i className="fas fa-star"></i><span>Memories</span></a>
+                  </div>
                 </div>
-              ))
-            )}
+              </div>
+
+              {/* right column: voting cards */}
+              <div className="right-col">
+                <div className="questions-grid">
+                  {/* --- All your original domain sections and cards preserved below (unchanged) --- */}
+
+                  {/* Domain: Favorite Place */}
+                  <div className="domain-section" id="fav-place-domain" style={{ marginTop: "0.5rem" }}>
+                    <div className="domain-title">Favorite Place</div>
+                    <div className="domain-cards animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                      <div className="card">
+                        <h3>What is your most favorite place to visit in Chitkara University?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q1" value="Square 1" /> Square 1</label>
+                          <label><input type="radio" name="q1" value="Library" /> Library</label>
+                          <label><input type="radio" name="q1" value="Sportorium" /> Sportorium</label>
+                          <label><input type="radio" name="q1" value="Other" /> Other</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Which is the most photogenic spot on campus?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q2" value="Alpha Zone" /> Alpha Zone</label>
+                          <label><input type="radio" name="q2" value="Hostel Road" /> Hostel Road</label>
+                          <label><input type="radio" name="q2" value="Exploretorium" /> Exploretorium</label>
+                          <label><input type="radio" name="q2" value="Other" /> Other</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Where do you go for peace and quiet?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q3" value="Library" /> Library</label>
+                          <label><input type="radio" name="q3" value="Alpha Zone" /> Alpha Zone</label>
+                          <label><input type="radio" name="q3" value="Temple" /> Temple</label>
+                          <label><input type="radio" name="q3" value="Hostel Room" /> Hostel Room</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Domain: Hangout */}
+                  <div className="domain-section" id="hangout-domain">
+                    <div className="domain-title">Hangout</div>
+                    <div className="domain-cards animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                      <div className="card">
+                        <h3>Favorite place to hangout with friends?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q4" value="Subway" /> Subway</label>
+                          <label><input type="radio" name="q4" value="Square 1" /> Square 1 </label>
+                          <label><input type="radio" name="q4" value="Hostel Common Room" /> Hostel Common Room</label>
+                          <label><input type="radio" name="q4" value="Other" /> Other</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Where do you spend most of your free time?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q5" value="Hostel" /> Hostel</label>
+                          <label><input type="radio" name="q5" value="Square 1" /> Square 1</label>
+                          <label><input type="radio" name="q5" value="Library" /> Library</label>
+                          <label><input type="radio" name="q5" value="Sports Ground" /> Sports Ground</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Best place for group study?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q6" value="Library" /> Library</label>
+                          <label><input type="radio" name="q6" value="Hostel Room" /> Hostel Room</label>
+                          <label><input type="radio" name="q6" value="Square 1" /> Square 1</label>
+                          <label><input type="radio" name="q6" value="CSE Block" /> CSE Block</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Domain: Food */}
+                  <div className="domain-section" id="food-domain">
+                    <div className="domain-title">Food</div>
+                    <div className="domain-cards animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                      <div className="card">
+                        <h3>Best food spot on campus?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q7" value="Square 1" /> Square 1</label>
+                          <label><input type="radio" name="q7" value="Square 2" /> Square 2</label>
+                          <label><input type="radio" name="q7" value="Subway" /> Subway </label>
+                          <label><input type="radio" name="q7" value="First Coffee" /> First Coffee</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Favorite snack at Chitkara?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q8" value="Maggi" /> Maggi</label>
+                          <label><input type="radio" name="q8" value="Sandwich" /> Sandwich</label>
+                          <label><input type="radio" name="q8" value="Chaat" /> Chaat</label>
+                          <label><input type="radio" name="q8" value="Pasta" /> Pasta</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Where do you get the best coffee?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q9" value="Dohful" /> Dohful</label>
+                          <label><input type="radio" name="q9" value="Chai Nagri" /> Chai Nagri</label>
+                          <label><input type="radio" name="q9" value="First Coffee" /> First Coffee</label>
+                          <label><input type="radio" name="q9" value="Hostel Mess" /> Hostel Mess</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Domain: Events */}
+                  <div className="domain-section" id="events-domain">
+                    <div className="domain-title">Events</div>
+                    <div className="domain-cards animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                      <div className="card">
+                        <h3>Which event do you enjoy the most?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q10" value="Freshers'" /> Freshers'</label>
+                          <label><input type="radio" name="q10" value="Rangrezz" /> Rangrezz</label>
+                          <label><input type="radio" name="q10" value="Sports Fest" /> Sports Fest</label>
+                          <label><input type="radio" name="q10" value="Other" /> Other</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Which event has the best food stalls?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q11" value="Rangrezz" /> Rangrezz</label>
+                          <label><input type="radio" name="q11" value="Sports Fest" /> Sports Fest</label>
+                          <label><input type="radio" name="q11" value="Hostel Night" /> Hostel Night</label>
+                          <label><input type="radio" name="q11" value="Other" /> Other</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Which event do you participate in the most?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q12" value="Sports Fest" /> Sports Fest</label>
+                          <label><input type="radio" name="q12" value="Freshers'" /> Freshers'</label>
+                          <label><input type="radio" name="q12" value="Hostel Night" /> Hostel Night</label>
+                          <label><input type="radio" name="q12" value="None" /> None</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Domain: Clubs */}
+                  <div className="domain-section" id="clubs-domain">
+                    <div className="domain-title">Clubs</div>
+                    <div className="domain-cards animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                      <div className="card">
+                        <h3>Which club is your favorite?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q13" value="Music Club" /> Music Club</label>
+                          <label><input type="radio" name="q13" value="Dance Club" /> Dance Club</label>
+                          <label><input type="radio" name="q13" value="Coding Club" /> Coding Club</label>
+                          <label><input type="radio" name="q13" value="Drama Club" /> Drama Club</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Which club organizes the best events?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q14" value="Music Club" /> Music Club</label>
+                          <label><input type="radio" name="q14" value="Dance Club" /> Dance Club</label>
+                          <label><input type="radio" name="q14" value="Coding Club" /> Coding Club</label>
+                          <label><input type="radio" name="q14" value="Drama Club" /> Drama Club</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Which club would you like to join?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q15" value="Music Club" /> Music Club</label>
+                          <label><input type="radio" name="q15" value="Dance Club" /> Dance Club</label>
+                          <label><input type="radio" name="q15" value="Coding Club" /> Coding Club</label>
+                          <label><input type="radio" name="q15" value="Drama Club" /> Drama Club</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Domain: Sports */}
+                  <div className="domain-section" id="sports-domain">
+                    <div className="domain-title">Sports</div>
+                    <div className="domain-cards animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                      <div className="card">
+                        <h3>Favorite sport to play at Chitkara?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q16" value="Football" /> Football</label>
+                          <label><input type="radio" name="q16" value="Basketball" /> Basketball</label>
+                          <label><input type="radio" name="q16" value="Cricket" /> Cricket</label>
+                          <label><input type="radio" name="q16" value="Badminton" /> Badminton</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Which sport do you watch the most?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q17" value="Football" /> Football</label>
+                          <label><input type="radio" name="q17" value="Basketball" /> Basketball</label>
+                          <label><input type="radio" name="q17" value="Cricket" /> Cricket</label>
+                          <label><input type="radio" name="q17" value="Volleyball" /> Volleyball</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Which sport would you like to see more events for?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q18" value="Football" /> Football</label>
+                          <label><input type="radio" name="q18" value="Basketball" /> Basketball</label>
+                          <label><input type="radio" name="q18" value="Cricket" /> Cricket</label>
+                          <label><input type="radio" name="q18" value="Pickleball" /> Pickleball</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Domain: Library */}
+                  <div className="domain-section" id="library-domain">
+                    <div className="domain-title">Library</div>
+                    <div className="domain-cards animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                      <div className="card">
+                        <h3>How often do you visit the library?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q19" value="Daily" />Daily</label>
+                          <label><input type="radio" name="q19" value="Weekly" /> Weekly</label>
+                          <label><input type="radio" name="q19" value="Rarely" /> Rarely</label>
+                          <label><input type="radio" name="q19" value="Never" /> Never</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Favorite spot in the library?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q20" value="Reading Room" /> Reading Room</label>
+                          <label><input type="radio" name="q20" value="Computer Section" /> Computer Section</label>
+                          <label><input type="radio" name="q20" value="Group Study Area" /> Group Study Area</label>
+                          <label><input type="radio" name="q20" value="Stacks" /> Stacks</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>What do you use the library for most?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q21" value="Study" /> Study</label>
+                          <label><input type="radio" name="q21" value="Group Work" /> Group Work</label>
+                          <label><input type="radio" name="q21" value="Research" /> Research</label>
+                          <label><input type="radio" name="q21" value="Reading Novels" /> Reading Novels</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Domain: Hostel */}
+                  <div className="domain-section" id="hostel-domain">
+                    <div className="domain-title">Hostel</div>
+                    <div className="domain-cards animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                      <div className="card">
+                        <h3>Best thing about hostel life?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q22" value="Friends" /> Friends</label>
+                          <label><input type="radio" name="q22" value="Food" /> Food</label>
+                          <label><input type="radio" name="q22" value="Freedom" /> Freedom</label>
+                          <label><input type="radio" name="q22" value="Events" /> Events</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>What do you miss most about hostel during holidays?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q23" value="Friends" /> Friends</label>
+                          <label><input type="radio" name="q23" value="Hostel Food" /> Hostel Food</label>
+                          <label><input type="radio" name="q23" value="Hostel Events" /> Hostel Events</label>
+                          <label><input type="radio" name="q23" value="Nothing" /> Nothing</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Favorite hostel event?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q24" value="Hostel Night" /> Hostel Night</label>
+                          <label><input type="radio" name="q24" value="DJ Night" /> DJ Night</label>
+                          <label><input type="radio" name="q24" value="Sports" /> Sports</label>
+                          <label><input type="radio" name="q24" value="Other" /> Other</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Domain: Memories */}
+                  <div className="domain-section" id="memories-domain">
+                    <div className="domain-title">Memories</div>
+                    <div className="domain-cards animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                      <div className="card">
+                        <h3>Your most memorable moment at Chitkara?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q25" value="First Day" /> First Day</label>
+                          <label><input type="radio" name="q25" value="Fests" /> Fests</label>
+                          <label><input type="radio" name="q25" value="Hostel Nights" /> Hostel Nights</label>
+                          <label><input type="radio" name="q25" value="Other" /> Other</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Best memory with friends?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q26" value="Group Study" /> Group Study</label>
+                          <label><input type="radio" name="q26" value="Night Outs" /> Night Outs</label>
+                          <label><input type="radio" name="q26" value="Hostel Fun" /> Hostel Fun</label>
+                          <label><input type="radio" name="q26" value="Trips" /> Trips</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+
+                      <div className="card">
+                        <h3>Which moment would you relive?</h3>
+                        <div className="options">
+                          <label><input type="radio" name="q27" value="First Day" /> First Day</label>
+                          <label><input type="radio" name="q27" value="Fests" /> Fests</label>
+                          <label><input type="radio" name="q27" value="Hostel Nights" /> Hostel Nights</label>
+                          <label><input type="radio" name="q27" value="Other" /> Other</label>
+                        </div>
+                        <button className="submit-btn" onClick={handleVote}>Submit Vote</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
           </div>
-        </aside>
+
+          {/* RIGHT: Sidebar with Preview Box and Reviews */}
+          <aside className="sidebar-right">
+
+
+
+            {/* Review Panel */}
+            <div className="review-panel" id="reviewPanel">
+              <div className="review-header">
+                <h3><i className="fas fa-comments"></i> Recent Reviews</h3>
+                <button className="add-review-btn-header" onClick={() => setIsModalOpen(true)}>
+                  <i className="fas fa-plus"></i> Add
+                </button>
+              </div>
+              <div className="review-content">
+                {flatReviews.length === 0 ? (
+                  <p className="no-reviews">No reviews yet. Be the first!</p>
+                ) : (
+                  flatReviews.map((rev, index) => (
+                    <div key={index} className="review-card">
+                      <p className="review-text">"{rev.text}"</p>
+                      <span className="review-option">Re: <strong>{rev.optionName}</strong></span>
+                      <span className="review-author">- {rev.author}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </aside>
+        </div>
       </div>
 
       {/* MODAL */}
