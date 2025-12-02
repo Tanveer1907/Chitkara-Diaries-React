@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./basketball.css";
+import "../../styles/club-form.css";
 import MainNavbar from "../../components/navbar/main_navbar.jsx";
+import ClubFooter from "../../components/ClubFooter/ClubFooter.jsx";
 
 // 🔁 UPDATE THESE PATHS TO YOUR REAL ASSETS
 import heroVideo from "../../assets/basketballvid.mp4";
@@ -247,42 +249,42 @@ export default function Basketball() {
         {/* TRYOUT FORM + CAPTAIN SPOTLIGHT */}
         <section id="bb-tryouts" className="bb-main-grid">
           {/* FORM CARD */}
-          <div className="bb-card bb-form-card">
+          <div className="club-card club-form-card">
             <h2>🚨 Open Tryout Registration</h2>
-            <p className="bb-form-intro">
+            <p className="club-form-intro">
               Lock your slot for the next selection camp. Fields marked * are
               mandatory.
             </p>
 
             <form
-              className="bb-form"
+              className="club-form"
               onSubmit={(e) => {
                 e.preventDefault();
                 alert("Thanks for registering for basketball tryouts! 🏀");
               }}
             >
-              <div className="bb-form-grid">
-                <div className="bb-input-group bb-floating">
+              <div className="club-form-grid">
+                <div className="club-input-group club-floating">
                   <input type="text" required placeholder=" " />
                   <label>First Name *</label>
                 </div>
 
-                <div className="bb-input-group bb-floating">
+                <div className="club-input-group club-floating">
                   <input type="text" required placeholder=" " />
                   <label>Last Name *</label>
                 </div>
 
-                <div className="bb-input-group bb-floating">
+                <div className="club-input-group club-floating">
                   <input type="email" required placeholder=" " />
                   <label>Email *</label>
                 </div>
 
-                <div className="bb-input-group bb-floating">
+                <div className="club-input-group club-floating">
                   <input type="tel" required placeholder=" " />
                   <label>Phone Number *</label>
                 </div>
 
-                <div className="bb-input-group">
+                <div className="club-input-group">
                   <label>Primary Role *</label>
                   <select required>
                     <option value="">Select Role</option>
@@ -294,7 +296,7 @@ export default function Basketball() {
                   </select>
                 </div>
 
-                <div className="bb-input-group">
+                <div className="club-input-group">
                   <label>Highest Level Played *</label>
                   <select required>
                     <option value="">Select Level</option>
@@ -304,13 +306,13 @@ export default function Basketball() {
                   </select>
                 </div>
 
-                <div className="bb-input-group bb-floating bb-full">
+                <div className="club-input-group club-floating club-full">
                   <textarea placeholder=" " />
                   <label>Key achievements / tournaments</label>
                 </div>
               </div>
 
-              <button type="submit" className="bb-btn-full">
+              <button type="submit" className="club-btn-full">
                 Submit Tryout Application
               </button>
             </form>
@@ -415,31 +417,11 @@ export default function Basketball() {
         </section>
 
         {/* FOOTER */}
-        <footer className="bb-footer">
-          <div className="bb-footer-inner">
-            <div className="bb-footer-info">
-              <h3>Basketball Program Coordinator</h3>
-              <p>
-                <strong>Name:</strong> Arjun Kapoor
-              </p>
-              <p>
-                <strong>Phone:</strong> +91 98765 43210
-              </p>
-              <p>
-                <strong>Email:</strong> arjun.kapoor@chitkara.edu.in
-              </p>
-            </div>
-
-            <div className="bb-footer-social">
-              <h3>Connect with Chitkara University</h3>
-              <div className="bb-social-icons">
-                <a href="https://www.linkedin.com/school/chitkara-university/" target="_blank"><i className="fab fa-linkedin-in"></i></a>
-              <a href="https://www.instagram.com/chitkarau" target="_blank"><i className="fab fa-instagram"></i></a>
-              <a href="https://youtube.com/@chitkarauniversity" target="_blank"><i className="fab fa-youtube"></i></a>
-            </div>
-            </div>
-          </div>
-        </footer>
+        <ClubFooter
+          coordinatorName="Arjun Kapoor"
+          coordinatorPhone="+91 98765 43210"
+          coordinatorEmail="arjun.kapoor@chitkara.edu.in"
+        />
       </main>
     </>
   );

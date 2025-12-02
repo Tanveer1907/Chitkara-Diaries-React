@@ -1,6 +1,8 @@
 import React from "react";
 import "./natraj.css";
+import "../../styles/club-form.css";
 import MainNavbar from "../../components/navbar/main_navbar.jsx";
+import ClubFooter from "../../components/ClubFooter/ClubFooter.jsx";
 
 // Update these imports to your real image paths
 import heroMain from "../../assets/n2.jpg";
@@ -28,7 +30,7 @@ export default function Panache() {
             <p className="panache-subtext">
               Official Classical dance club of Chitkara University.
               Natraj celebrates the rich heritage of Indian classical dance, bringing together discipline, artistry, and devotion to rhythm.
-Our performers carry forward timeless traditions while creating soulful, captivating experiences on stage.
+              Our performers carry forward timeless traditions while creating soulful, captivating experiences on stage.
             </p>
 
 
@@ -51,17 +53,17 @@ Our performers carry forward timeless traditions while creating soulful, captiva
           <div className="panache-hero-visual">
             <div className="hero-main-frame">
               <img src={heroMain} alt="Panache runway" />
-              
+
             </div>
 
             <div className="hero-floating hero-floating-top">
               <img src={heroSide1} alt="Editorial pose" />
-              
+
             </div>
 
             <div className="hero-floating hero-floating-bottom">
               <img src={heroSide2} alt="Backstage moments" />
-              
+
             </div>
           </div>
         </section>
@@ -76,83 +78,83 @@ Our performers carry forward timeless traditions while creating soulful, captiva
 
         {/* MAIN GRID: FORM + JOURNEY */}
         {/* MAIN GRID: FORM + HIGHLIGHT VIDEO */}
-<section className="panache-main-grid">
+        <section className="panache-main-grid">
 
-  {/* FORM */}
-  <div className="panache-card panache-form-card">
-    <h2>Audition Interest Form</h2>
-    <p className="card-intro">
-      Tell us who you are and how you want to show up on stage. This is
-      not the final selection form – it helps us reach out before
-      auditions open.
-    </p>
+          {/* FORM */}
+          <div className="club-card club-form-card">
+            <h2>Audition Interest Form</h2>
+            <p className="club-form-intro">
+              Tell us who you are and how you want to show up on stage. This is
+              not the final selection form – it helps us reach out before
+              auditions open.
+            </p>
 
-    <form className="panache-form">
-      <div className="form-grid">
-        <div className="form-group floating">
-          <input type="text" placeholder=" " required />
-          <label>Full Name *</label>
-        </div>
-        <div className="form-group floating">
-          <input type="email" placeholder=" " required />
-          <label>Email *</label>
-        </div>
-        <div className="form-group floating">
-          <input type="tel" placeholder=" " required />
-          <label>Contact Number *</label>
-        </div>
-      </div>
+            <form className="club-form">
+              <div className="club-form-grid">
+                <div className="club-input-group club-floating">
+                  <input type="text" placeholder=" " required />
+                  <label>Full Name *</label>
+                </div>
+                <div className="club-input-group club-floating">
+                  <input type="email" placeholder=" " required />
+                  <label>Email *</label>
+                </div>
+                <div className="club-input-group club-floating">
+                  <input type="tel" placeholder=" " required />
+                  <label>Contact Number *</label>
+                </div>
+              </div>
 
-      <button type="submit" className="panache-submit">
-        Submit interest
-      </button>
-    </form>
-  </div>
+              <button type="submit" className="club-btn-full">
+                Submit interest
+              </button>
+            </form>
+          </div>
 
-  {/* HIGHLIGHT VIDEO — replacing Journey 100% */}
-  <div className="panache-card panache-video-card">
-    <h2>Highlights</h2>
-    <p className="card-intro">Experience the elegance, attitude and artistry of Natraj.</p>
+          {/* HIGHLIGHT VIDEO — replacing Journey 100% */}
+          <div className="panache-card panache-video-card">
+            <h2>Highlights</h2>
+            <p className="card-intro">Experience the elegance, attitude and artistry of Natraj.</p>
 
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        marginTop: "20px",
-      }}
-    >
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          maxWidth: "550px",
-          height: "350px",
-          borderRadius: "20px",
-          overflow: "hidden",
-          boxShadow: "0 10px 25px rgba(0,0,0,0.25)",
-          background: "#fff",
-        }}
-      >
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-          }}
-        >
-          <source src={heroVideo} type="video/mp4" />
-        </video>
-      </div>
-    </div>
-  </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                marginTop: "20px",
+              }}
+            >
+              <div
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  maxWidth: "550px",
+                  height: "350px",
+                  borderRadius: "20px",
+                  overflow: "hidden",
+                  boxShadow: "0 10px 25px rgba(0,0,0,0.25)",
+                  background: "#fff",
+                }}
+              >
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                >
+                  <source src={heroVideo} type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
 
-</section>
+        </section>
 
 
         {/* LOOKBOOK STRIP */}
@@ -203,36 +205,16 @@ Our performers carry forward timeless traditions while creating soulful, captiva
             </article>
           </div>
         </section>
-        
+
 
 
 
         {/* FOOTER */}
-        <footer className="bb-footer">
-          <div className="bb-footer-inner">
-            <div className="bb-footer-info">
-              <h3>Basketball Program Coordinator</h3>
-              <p>
-                <strong>Name:</strong> Arjun Kapoor
-              </p>
-              <p>
-                <strong>Phone:</strong> +91 98765 43210
-              </p>
-              <p>
-                <strong>Email:</strong> arjun.kapoor@chitkara.edu.in
-              </p>
-            </div>
-
-            <div className="bb-footer-social">
-              <h3>Connect with Chitkara University</h3>
-              <div className="bb-social-icons">
-                <a href="https://www.linkedin.com/school/chitkara-university/" target="_blank"><i className="fab fa-linkedin-in"></i></a>
-              <a href="https://www.instagram.com/chitkarau" target="_blank"><i className="fab fa-instagram"></i></a>
-              <a href="https://youtube.com/@chitkarauniversity" target="_blank"><i className="fab fa-youtube"></i></a>
-            </div>
-            </div>
-          </div>
-        </footer>
+        <ClubFooter
+          coordinatorName="Arjun Kapoor"
+          coordinatorPhone="+91 98765 43210"
+          coordinatorEmail="arjun.kapoor@chitkara.edu.in"
+        />
       </main>
     </>
   );

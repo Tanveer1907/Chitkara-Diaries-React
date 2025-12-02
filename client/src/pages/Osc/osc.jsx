@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./osc.css";
+import "../../styles/club-form.css";
 import MainNavbar from "../../components/navbar/main_navbar";
+import ClubFooter from "../../components/ClubFooter/ClubFooter";
 
 import img1 from "../../assets/osc1.jpg";
 import img2 from "../../assets/osc2.jpg";
@@ -146,38 +148,39 @@ export default function Osc() {
         </div>
 
         {/* Registration Form */}
-        <div className="registration-container">
+        <div className="club-card club-form-card">
           <h2>Join Our Team</h2>
 
-          <form onSubmit={handleSubmit}>
-            <div className="form-grid">
+          <form className="club-form" onSubmit={handleSubmit}>
+            <div className="club-form-grid">
 
-              <div className="form-group">
+              <div className="club-input-group club-floating">
                 <input name="first_name" value={formData.first_name} onChange={handleChange} type="text" required placeholder=" " />
                 <label>First Name *</label>
               </div>
 
-              <div className="form-group">
+              <div className="club-input-group club-floating">
                 <input name="last_name" value={formData.last_name} onChange={handleChange} type="text" required placeholder=" " />
                 <label>Last Name *</label>
               </div>
 
-              <div className="form-group">
+              <div className="club-input-group club-floating">
                 <input name="email" value={formData.email} onChange={handleChange} type="email" required placeholder=" " />
                 <label>Email *</label>
               </div>
 
-              <div className="form-group">
+              <div className="club-input-group club-floating">
                 <input name="phone" value={formData.phone} onChange={handleChange} type="tel" required placeholder=" " />
                 <label>Phone *</label>
               </div>
 
-              <div className="form-group">
+              <div className="club-input-group club-floating">
                 <input name="age" value={formData.age} onChange={handleChange} type="number" required placeholder=" " />
                 <label>Age *</label>
               </div>
 
-              <div className="form-group">
+              <div className="club-input-group">
+                <label>Preferred Team</label>
                 <select name="preferred_team" value={formData.preferred_team} onChange={handleChange}>
                   <option hidden></option>
                   <option value="organizing">Organizing Team</option>
@@ -188,10 +191,10 @@ export default function Osc() {
                   <option value="content">Content Team</option>
                   <option value="promotion">Promotion Team</option>
                 </select>
-                <label>Preferred Team</label>
               </div>
 
-              <div className="form-group">
+              <div className="club-input-group">
+                <label>Year *</label>
                 <select name="year" value={formData.year} onChange={handleChange} required>
                   <option hidden></option>
                   <option value="1st">1st Year</option>
@@ -199,50 +202,29 @@ export default function Osc() {
                   <option value="3rd">3rd Year</option>
                   <option value="4th">4th Year</option>
                 </select>
-                <label>Year *</label>
               </div>
 
-              <div className="form-group full-width">
+              <div className="club-input-group club-floating club-full">
                 <textarea name="skills" value={formData.skills} onChange={handleChange} placeholder=" "></textarea>
                 <label>Skills</label>
               </div>
 
             </div>
 
-            <button type="submit" className="submit-btn">Register</button>
+            <button type="submit" className="club-btn-full">Register</button>
 
-            {message && <p className="form-message">{message}</p>}
+            {message && <p className="club-form-intro" style={{ marginTop: "10px", color: message.includes("success") ? "green" : "red" }}>{message}</p>}
           </form>
         </div>
 
       </div>
 
       {/* Footer */}
-      <footer className="clean-footer">
-  <div className="footer-left">
-    <h3>Open Source Team Coordinator</h3>
-    <p><strong>Name:</strong> Prateek Sharma</p>
-    <p><strong>Phone:</strong> +91 98765 43820</p>
-    <p><strong>Email:</strong> prateek.sharma@chitkara.edu.in</p>
-  </div>
-
-  <div className="footer-right">
-    <h3>Connect with Chitkara University</h3>
-    <div className="footer-icons">
-      <a href="https://www.linkedin.com/school/chitkara-university/" className="linkedin" target="_blank">
-        <i className="fab fa-linkedin"></i>
-      </a>
-
-      <a href="https://www.instagram.com/chitkarau" className="instagram" target="_blank">
-        <i className="fab fa-instagram"></i>
-      </a>
-
-      <a href="https://youtube.com/@chitkarauniversity" className="youtube" target="_blank">
-        <i className="fab fa-youtube"></i>
-      </a>
-    </div>
-  </div>
-</footer>
+      <ClubFooter
+        coordinatorName="Prateek Sharma"
+        coordinatorPhone="+91 98765 43820"
+        coordinatorEmail="prateek.sharma@chitkara.edu.in"
+      />
 
     </>
   );

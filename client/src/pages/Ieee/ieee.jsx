@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./ieee.css";
+import "../../styles/club-form.css";
 import MainNavbar from "../../components/navbar/main_navbar.jsx";
+import ClubFooter from "../../components/ClubFooter/ClubFooter.jsx";
 
 import img1 from "../../assets/ieee1.jpg";
 import img2 from "../../assets/ieee2.jpg";
@@ -142,69 +144,71 @@ export default function Ieee() {
       {/* FORM + LEADER SPOTLIGHT */}
       <section id="combined-section" className="section-padded">
         <div className="container combined-layout">
-          
+
           {/* FORM */}
           <div className="member-registration-column">
-            <h2 className="column-title registration-title">💡 Club Membership Form</h2>
+            <div className="club-card club-form-card">
+              <h2 className="column-title registration-title">💡 Club Membership Form</h2>
 
-            <form className="registration-form" onSubmit={handleSubmit}>
-              <div className="form-grid">
+              <form className="club-form" onSubmit={handleSubmit}>
+                <div className="club-form-grid">
 
-                <div className="form-group">
-                  <input name="first_name" value={formData.firstname} onChange={handleChange} required />
-                  <label>First Name *</label>
+                  <div className="club-input-group">
+                    <label>First Name *</label>
+                    <input name="first_name" value={formData.firstname} onChange={handleChange} required />
+                  </div>
+
+                  <div className="club-input-group">
+                    <label>Last Name *</label>
+                    <input name="last_name" value={formData.lastname} onChange={handleChange} required />
+                  </div>
+
+                  <div className="club-input-group">
+                    <label>Email Address *</label>
+                    <input name="email" value={formData.email} onChange={handleChange} required />
+                  </div>
+
+                  <div className="club-input-group">
+                    <label>Phone Number *</label>
+                    <input name="phone" value={formData.phone} onChange={handleChange} required />
+                  </div>
+
+                  <div className="club-input-group">
+                    <label>Age *</label>
+                    <input name="age" value={formData.age} onChange={handleChange} required />
+                  </div>
+
+                  <div className="club-input-group">
+                    <label>Preferred Team</label>
+                    <select name="preferred_team" value={formData.team} onChange={handleChange}>
+                      <option hidden></option>
+                      <option value="organizing">Organizing Team</option>
+                      <option value="media">Media Team</option>
+                      <option value="graphics">Graphics Team</option>
+                    </select>
+                  </div>
+
+                  <div className="club-input-group">
+                    <label>Year *</label>
+                    <select name="year" value={formData.year} onChange={handleChange} required>
+                      <option hidden></option>
+                      <option value="first">1st Year</option>
+                      <option value="second">2nd Year</option>
+                      <option value="third">3rd Year</option>
+                      <option value="fourth">4th Year</option>
+                    </select>
+                  </div>
+
+                  <div className="club-input-group club-full">
+                    <label>Skills</label>
+                    <textarea name="skills" value={formData.skills} onChange={handleChange}></textarea>
+                  </div>
                 </div>
 
-                <div className="form-group">
-                  <input name="last_name" value={formData.lastname} onChange={handleChange} required />
-                  <label>Last Name *</label>
-                </div>
-
-                <div className="form-group">
-                  <input name="email" value={formData.email} onChange={handleChange} required />
-                  <label>Email Address *</label>
-                </div>
-
-                <div className="form-group">
-                  <input name="phone" value={formData.phone} onChange={handleChange} required />
-                  <label>Phone Number *</label>
-                </div>
-
-                <div className="form-group">
-                  <input name="age" value={formData.age} onChange={handleChange} required />
-                  <label>Age *</label>
-                </div>
-
-                <div className="form-group">
-                  <select name="preferred_team" value={formData.team} onChange={handleChange}>
-                    <option hidden></option>
-                    <option value="organizing">Organizing Team</option>
-                    <option value="media">Media Team</option>
-                    <option value="graphics">Graphics Team</option>
-                  </select>
-                  <label>Preferred Team</label>
-                </div>
-
-                <div className="form-group">
-                  <select name="year" value={formData.year} onChange={handleChange} required>
-                    <option hidden></option>
-                    <option value="first">1st Year</option>
-                    <option value="second">2nd Year</option>
-                    <option value="third">3rd Year</option>
-                    <option value="fourth">4th Year</option>
-                  </select>
-                  <label>Year *</label>
-                </div>
-
-                <div className="form-group full-width">
-                  <textarea name="skills" value={formData.skills} onChange={handleChange}></textarea>
-                  <label>Skills</label>
-                </div>
-              </div>
-
-              <p className="form-msg">{message}</p>
-              <button className="submit-btn full-width">Join IEEE</button>
-            </form>
+                <p className="form-msg">{message}</p>
+                <button className="club-btn-full">Join IEEE</button>
+              </form>
+            </div>
           </div>
 
           {/* LEADER SPOTLIGHT */}
@@ -227,24 +231,12 @@ export default function Ieee() {
         </div>
       </section>
 
-      {/* EVENTS SECTION */} <section className="events-section section-padded"> <div className="container"> <h2 className="section-title events-title">📅 Upcoming Coding Events</h2> <div className="events-grid"> <div className="event-card"> <div className="event-date-box"> <span className="month">NOV</span> <span className="day">05</span> </div> <div className="event-details"> <h3>Weekly Algo Sprint #4</h3> <p>DP + Graphs practice session.</p> <span className="event-location"> <i className="fas fa-desktop"></i> CS Lab, Turing Block </span> </div> </div> <div className="event-card"> <div className="event-date-box"> <span className="month">NOV</span> <span className="day">18</span> </div> <div className="event-details"> <h3>Mock Technical Interview Workshop</h3> <p>Led by a Google SDE.</p> <span className="event-location"> <i className="fas fa-user-tie"></i> Seminar Hall B </span> </div> </div> <div className="event-card"> <div className="event-date-box"> <span className="month">DEC</span> <span className="day">01</span> </div> <div className="event-details"> <h3>Intra-College Hackathon</h3> <p>24-hour coding challenge.</p> <span className="event-location"> <i className="fas fa-laptop-code"></i> Innovation Center </span> </div> </div> </div> </div> </section> 
-      <footer className="clean-footer">
-  <div className="footer-left">
-    <h3>Team Coordinator</h3>
-    <p><strong>Name:</strong> Arjun Kapoor</p>
-    <p><strong>Phone:</strong> +91 98765 43210</p>
-    <p><strong>Email:</strong> arjun.kapoor@chitkara.edu.in</p>
-  </div>
-
-  <div className="footer-right">
-    <h3>Connect with Chitkara University</h3>
-    <div className="footer-icons">
-      <a href="#" className="linkedin"><i className="fab fa-linkedin"></i></a>
-      <a href="#" className="instagram"><i className="fab fa-instagram"></i></a>
-      <a href="#" className="youtube"><i className="fab fa-youtube"></i></a>
-    </div>
-  </div>
-</footer>
-</>
+      {/* EVENTS SECTION */} <section className="events-section section-padded"> <div className="container"> <h2 className="section-title events-title">📅 Upcoming Coding Events</h2> <div className="events-grid"> <div className="event-card"> <div className="event-date-box"> <span className="month">NOV</span> <span className="day">05</span> </div> <div className="event-details"> <h3>Weekly Algo Sprint #4</h3> <p>DP + Graphs practice session.</p> <span className="event-location"> <i className="fas fa-desktop"></i> CS Lab, Turing Block </span> </div> </div> <div className="event-card"> <div className="event-date-box"> <span className="month">NOV</span> <span className="day">18</span> </div> <div className="event-details"> <h3>Mock Technical Interview Workshop</h3> <p>Led by a Google SDE.</p> <span className="event-location"> <i className="fas fa-user-tie"></i> Seminar Hall B </span> </div> </div> <div className="event-card"> <div className="event-date-box"> <span className="month">DEC</span> <span className="day">01</span> </div> <div className="event-details"> <h3>Intra-College Hackathon</h3> <p>24-hour coding challenge.</p> <span className="event-location"> <i className="fas fa-laptop-code"></i> Innovation Center </span> </div> </div> </div> </div> </section>
+      <ClubFooter
+        coordinatorName="Arjun Kapoor"
+        coordinatorPhone="+91 98765 43210"
+        coordinatorEmail="arjun.kapoor@chitkara.edu.in"
+      />
+    </>
   );
 }

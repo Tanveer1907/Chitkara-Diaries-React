@@ -391,21 +391,7 @@ body {
     transition: opacity 0.6s ease;
 }
 
-.loader-overlay.hide {
-    opacity: 0;
-    pointer-events: none;
-}
 
-.loader-logo {
-    width: 80px;
-    animation: spin 1.2s linear infinite;
-}
-
-@keyframes spin {
-    100% {
-        transform: rotate(360deg);
-    }
-}
 
 .loader-text {
     margin-top: 15px;
@@ -465,19 +451,5 @@ body {
 }
 
 .input-icon {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1.1rem;
-    color: #7a7a7a !important;
-    pointer-events: none;
-    z-index: 100 !important;
-    display: block !important;
-    opacity: 1 !important;
-}
-
-.input-icon.right {
-    left: auto;
     right: 45px;
 }

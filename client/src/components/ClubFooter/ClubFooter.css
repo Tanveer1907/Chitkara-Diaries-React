@@ -1,0 +1,69 @@
+/* CLEAN WHITE FOOTER - Extracted from osc.css */
+.clean-footer {
+    width: 100%;
+    background: #ffffff;
+    padding: 50px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-top: 2px solid #e5e5e5;
+    flex-wrap: wrap;
+}
+
+.footer-left h3,
+.footer-right h3 {
+    font-size: 22px;
+    color: #222;
+    margin-bottom: 15px;
+}
+
+.footer-left p {
+    font-size: 16px;
+    color: #444;
+    margin: 4px 0;
+}
+
+/* ICONS STYLING */
+.footer-icons {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-icons a {
+    width: 45px;
+    height: 45px;
+    background: #f1f1f1;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    color: #333;
+    transition: 0.3s ease;
+    text-decoration: none;
+}
+
+/* HOVER COLORS */
+.footer-icons .linkedin:hover {
+    background: #0e76a8;
+    color: white;
+}
+
+.footer-icons .instagram:hover {
+    background: #e1306c;
+    color: white;
+}
+
+.footer-icons .youtube:hover {
+    background: #ff0000;
+    color: white;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .clean-footer {
+        flex-direction: column;
+        gap: 40px;
+        padding: 40px 25px;
+    }
+}

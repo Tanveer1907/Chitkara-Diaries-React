@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./cricket.css";
-
+import "../../styles/club-form.css";
 import MainNavbar from "../../components/navbar/main_navbar.jsx";
+import ClubFooter from "../../components/ClubFooter/ClubFooter.jsx";
 
 // Adjust these paths to match your actual files
 import heroVideo from "../../assets/cricketvid.mp4";
@@ -238,32 +239,79 @@ export default function Cricket() {
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="cricket-footer">
-        <div className="footer-inner">
-          <div className="footer-info">
-            <h3>Team Coordinator</h3>
-            <p>
-              <strong>Name:</strong> Arjun Kapoor
-            </p>
-            <p>
-              <strong>Phone:</strong> +91 98765 43210
-            </p>
-            <p>
-              <strong>Email:</strong> arjun.kapoor@chitkara.edu.in
-            </p>
-          </div>
+      {/* ===== REGISTRATION FORM ===== */}
+      <section className="cricket-form-section" style={{ padding: "40px 7vw 60px" }}>
+        <div className="club-card club-form-card">
+          <h2>🏏 Join the Cricket Squad</h2>
+          <p className="club-form-intro">
+            Register your interest for the upcoming trials.
+          </p>
 
-          <div className="footer-social">
-            <h3>Connect with Chitkara University</h3>
-            <div className="social-icons">
-              <a href="https://www.linkedin.com/school/chitkara-university/" target="_blank"><i className="fab fa-linkedin-in"></i></a>
-              <a href="https://www.instagram.com/chitkarau" target="_blank"><i className="fab fa-instagram"></i></a>
-              <a href="https://youtube.com/@chitkarauniversity" target="_blank"><i className="fab fa-youtube"></i></a>
+          <form className="club-form" onSubmit={(e) => {
+            e.preventDefault();
+            alert("Registration submitted for Cricket trials!");
+          }}>
+            <div className="club-form-grid">
+              <div className="club-input-group club-floating">
+                <input type="text" required placeholder=" " />
+                <label>First Name *</label>
+              </div>
+
+              <div className="club-input-group club-floating">
+                <input type="text" required placeholder=" " />
+                <label>Last Name *</label>
+              </div>
+
+              <div className="club-input-group club-floating">
+                <input type="email" required placeholder=" " />
+                <label>Email *</label>
+              </div>
+
+              <div className="club-input-group club-floating">
+                <input type="tel" required placeholder=" " />
+                <label>Phone Number *</label>
+              </div>
+
+              <div className="club-input-group">
+                <label>Role *</label>
+                <select required>
+                  <option value="">Select Role</option>
+                  <option>Batsman</option>
+                  <option>Bowler (Pace)</option>
+                  <option>Bowler (Spin)</option>
+                  <option>All-Rounder</option>
+                  <option>Wicket Keeper</option>
+                </select>
+              </div>
+
+              <div className="club-input-group">
+                <label>Batting Style</label>
+                <select>
+                  <option value="">Select Style</option>
+                  <option>Right Hand</option>
+                  <option>Left Hand</option>
+                </select>
+              </div>
+
+              <div className="club-input-group club-floating club-full">
+                <textarea placeholder=" " />
+                <label>Past Experience / Achievements</label>
+              </div>
             </div>
-          </div>
+
+            <button type="submit" className="club-btn-full">
+              Submit Registration
+            </button>
+          </form>
         </div>
-      </footer>
+      </section>
+
+      {/* ===== FOOTER ===== */}
+      <ClubFooter
+        coordinatorName="Arjun Kapoor"
+        coordinatorPhone="+91 98765 43210"
+        coordinatorEmail="arjun.kapoor@chitkara.edu.in"
+      />
     </div>
   );
 }
