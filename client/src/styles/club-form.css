@@ -140,3 +140,187 @@
         grid-template-columns: minmax(0, 1fr);
     }
 }
+
+/* OVERRIDE BROWSER AUTOFILL BLUE BACKGROUND */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+    -webkit-text-fill-color: #333 !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* =========================================
+   STATUS FEEDBACK (LOADER & SUCCESS MODAL)
+   ========================================= */
+
+/* --- LOADER (Copied from auth.css for consistency) --- */
+.club-loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.club-loader-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    animation: pulse-spin 2s infinite ease-in-out;
+    box-shadow: 0 0 20px rgba(98, 20, 20, 0.2);
+}
+
+.club-loader-text {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: #621414;
+    font-weight: 700;
+    letter-spacing: 1px;
+    animation: fade 1.5s infinite alternate;
+}
+
+/* --- SUCCESS MODAL --- */
+.club-success-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.club-success-modal {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 24px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.success-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    display: block;
+    animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.2s backwards;
+}
+
+.club-success-modal h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.club-success-modal p {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 1rem;
+}
+
+.club-success-btn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 99px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+}
+
+.club-success-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 24px rgba(16, 185, 129, 0.3);
+}
+
+.club-success-btn:active {
+    transform: translateY(0);
+}
+
+/* KEYFRAMES */
+@keyframes pulse-spin {
+    0% {
+        transform: scale(0.95) rotate(0deg);
+        box-shadow: 0 0 0 0 rgba(98, 20, 20, 0.7);
+    }
+
+    50% {
+        transform: scale(1.1) rotate(180deg);
+        box-shadow: 0 0 0 20px rgba(98, 20, 20, 0);
+    }
+
+    100% {
+        transform: scale(0.95) rotate(360deg);
+        box-shadow: 0 0 0 0 rgba(98, 20, 20, 0);
+    }
+}
+
+@keyframes fade {
+    from {
+        opacity: 0.6;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scaleUp {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pop {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

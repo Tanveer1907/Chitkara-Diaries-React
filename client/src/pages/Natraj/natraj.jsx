@@ -13,7 +13,7 @@ import look2 from "../../assets/n2.jpg";
 import look3 from "../../assets/n3.jpg";
 import heroVideo from "../../assets/natrajvid.mp4";
 
-export default function Panache() {
+export default function Natraj() {
   return (
     <>
       <MainNavbar />
@@ -89,23 +89,53 @@ export default function Panache() {
               auditions open.
             </p>
 
-            <form className="club-form">
+            <form className="club-form" noValidate onSubmit={async (e) => {
+              e.preventDefault();
+              alert("Form onSubmit triggered!");
+              console.log("Natraj form submitted");
+              try {
+                const form = new FormData(e.target);
+                const formData = Object.fromEntries(form.entries());
+                console.log("Sending data:", formData);
+
+                const response = await fetch("/api/natraj/add", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(formData),
+                });
+                const data = await response.json();
+                if (data.success) {
+                  alert("Success: " + data.message);
+                  e.target.reset();
+                } else {
+                  alert("Server Error: " + data.message);
+                }
+              } catch (err) {
+                console.error(err);
+                alert("Network Error: " + err.message);
+              }
+            }}>
               <div className="club-form-grid">
                 <div className="club-input-group club-floating">
-                  <input type="text" placeholder=" " required />
+                  <input type="text" placeholder=" " required name="full_name" />
                   <label>Full Name *</label>
                 </div>
                 <div className="club-input-group club-floating">
-                  <input type="email" placeholder=" " required />
+                  <input type="email" placeholder=" " required name="email" />
                   <label>Email *</label>
                 </div>
                 <div className="club-input-group club-floating">
-                  <input type="tel" placeholder=" " required />
+                  <input type="tel" placeholder=" " required name="phone" />
                   <label>Contact Number *</label>
                 </div>
               </div>
 
-              <button type="submit" className="club-btn-full">
+              <button
+                type="submit"
+                className="club-btn-full"
+                onClick={() => alert("Button Clicked!")}
+                style={{ zIndex: 9999, position: 'relative' }}
+              >
                 Submit interest
               </button>
             </form>

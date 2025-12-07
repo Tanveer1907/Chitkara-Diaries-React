@@ -247,34 +247,60 @@ export default function Cricket() {
             Register your interest for the upcoming trials.
           </p>
 
-          <form className="club-form" onSubmit={(e) => {
+          <form className="club-form" onSubmit={async (e) => {
             e.preventDefault();
-            alert("Registration submitted for Cricket trials!");
+            console.log("Form submitted");
+
+            try {
+              const form = new FormData(e.target);
+              const formData = Object.fromEntries(form.entries());
+              console.log("Sending data:", formData);
+
+              const response = await fetch("/api/cricket/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+              });
+
+              console.log("Response status:", response.status);
+              const data = await response.json();
+              console.log("Response data:", data);
+
+              if (data.success) {
+                alert("Registration submitted for Cricket trials!");
+                e.target.reset();
+              } else {
+                alert("Error from server: " + data.message);
+              }
+            } catch (err) {
+              console.error("Submission error:", err);
+              alert("Submission failed: " + err.message);
+            }
           }}>
             <div className="club-form-grid">
               <div className="club-input-group club-floating">
-                <input type="text" required placeholder=" " />
+                <input type="text" required placeholder=" " name="first_name" />
                 <label>First Name *</label>
               </div>
 
               <div className="club-input-group club-floating">
-                <input type="text" required placeholder=" " />
+                <input type="text" required placeholder=" " name="last_name" />
                 <label>Last Name *</label>
               </div>
 
               <div className="club-input-group club-floating">
-                <input type="email" required placeholder=" " />
+                <input type="email" required placeholder=" " name="email" />
                 <label>Email *</label>
               </div>
 
               <div className="club-input-group club-floating">
-                <input type="tel" required placeholder=" " />
+                <input type="tel" required placeholder=" " name="phone" />
                 <label>Phone Number *</label>
               </div>
 
               <div className="club-input-group">
                 <label>Role *</label>
-                <select required>
+                <select required name="role">
                   <option value="">Select Role</option>
                   <option>Batsman</option>
                   <option>Bowler (Pace)</option>
@@ -286,7 +312,7 @@ export default function Cricket() {
 
               <div className="club-input-group">
                 <label>Batting Style</label>
-                <select>
+                <select name="batting_style">
                   <option value="">Select Style</option>
                   <option>Right Hand</option>
                   <option>Left Hand</option>
@@ -294,12 +320,17 @@ export default function Cricket() {
               </div>
 
               <div className="club-input-group club-floating club-full">
-                <textarea placeholder=" " />
+                <textarea placeholder=" " name="achievements" />
                 <label>Past Experience / Achievements</label>
               </div>
             </div>
 
-            <button type="submit" className="club-btn-full">
+            <button
+              type="submit"
+              className="club-btn-full"
+              onClick={() => alert("Button Clicked!")}
+              style={{ zIndex: 9999, position: 'relative' }}
+            >
               Submit Registration
             </button>
           </form>

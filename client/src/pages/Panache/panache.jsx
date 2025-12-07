@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "./panache.css";
 import "../../styles/club-form.css";
 import MainNavbar from "../../components/navbar/main_navbar.jsx";
 import ClubFooter from "../../components/ClubFooter/ClubFooter.jsx";
+import StatusFeedback from "../../components/StatusFeedback/StatusFeedback.jsx";
 
 // Update these imports to your real image paths
 import heroMain from "../../assets/p6.jpg";
@@ -14,9 +15,24 @@ import look3 from "../../assets/p3.jpg";
 import heroVideo from "../../assets/panachevid.mp4";
 
 export default function Panache() {
+
+  // Status state for unified feedback
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    error: ""
+  });
+
   return (
     <>
       <MainNavbar />
+
+      {/* FEEDBACK COMPONENT */}
+      <StatusFeedback
+        loading={status.loading}
+        success={status.success}
+        onClose={() => setStatus({ ...status, success: false })}
+      />
 
       <main className="panache-page">
         {/* HERO */}
@@ -87,29 +103,57 @@ export default function Panache() {
               auditions open.
             </p>
 
-            <form className="club-form">
+            <form className="club-form" noValidate onSubmit={async (e) => {
+              e.preventDefault();
+              setStatus({ loading: true, success: false, error: "" });
+
+              try {
+                const form = new FormData(e.target);
+                const formData = Object.fromEntries(form.entries());
+
+                // Simulate small delay
+                await new Promise(r => setTimeout(r, 800));
+
+                const response = await fetch("/api/panache/add", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(formData),
+                });
+                const data = await response.json();
+                if (data.success) {
+                  setStatus({ loading: false, success: true, error: "" });
+                  e.target.reset();
+                } else {
+                  setStatus({ loading: false, success: false, error: data.message });
+                  alert("Server Error: " + data.message);
+                }
+              } catch (err) {
+                setStatus({ loading: false, success: false, error: err.message });
+                alert("Network Error: " + err.message);
+              }
+            }}>
               <div className="club-form-grid">
                 <div className="club-input-group club-floating">
-                  <input type="text" placeholder=" " required />
+                  <input type="text" placeholder=" " required name="full_name" />
                   <label>Full Name *</label>
                 </div>
                 <div className="club-input-group club-floating">
-                  <input type="text" placeholder=" " required />
+                  <input type="text" placeholder=" " required name="student_id" />
                   <label>University ID *</label>
                 </div>
 
                 <div className="club-input-group club-floating">
-                  <input type="email" placeholder=" " required />
+                  <input type="email" placeholder=" " required name="email" />
                   <label>Email *</label>
                 </div>
                 <div className="club-input-group club-floating">
-                  <input type="tel" placeholder=" " required />
+                  <input type="tel" placeholder=" " required name="phone" />
                   <label>Contact Number *</label>
                 </div>
 
                 <div className="club-input-group">
                   <label>Preferred Category *</label>
-                  <select required>
+                  <select required name="category">
                     <option value="">Select</option>
                     <option>Runway / Ramp Walk</option>
                     <option>Editorial & Concept Shoots</option>
@@ -120,7 +164,7 @@ export default function Panache() {
 
                 <div className="club-input-group">
                   <label>Experience Level *</label>
-                  <select required>
+                  <select required name="experience">
                     <option value="">Select</option>
                     <option>First-time, just passionate</option>
                     <option>Performed in school / college</option>
@@ -129,12 +173,17 @@ export default function Panache() {
                 </div>
 
                 <div className="club-input-group club-floating club-full">
-                  <textarea placeholder=" " />
+                  <textarea placeholder=" " name="style" />
                   <label>Anything we should know about your style?</label>
                 </div>
               </div>
 
-              <button type="submit" className="club-btn-full">
+              <button
+                type="submit"
+                className="club-btn-full"
+                onClick={() => { }}
+                style={{ zIndex: 9999, position: 'relative' }}
+              >
                 Submit interest
               </button>
             </form>

@@ -258,35 +258,59 @@ export default function Basketball() {
 
             <form
               className="club-form"
-              onSubmit={(e) => {
+              noValidate
+              onSubmit={async (e) => {
                 e.preventDefault();
-                alert("Thanks for registering for basketball tryouts! 🏀");
+                alert("Form onSubmit triggered!");
+                console.log("Basketball form submitted");
+                try {
+                  const form = new FormData(e.target);
+                  const formData = Object.fromEntries(form.entries());
+                  console.log("Sending data:", formData);
+
+                  const response = await fetch("/api/basketball/add", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData),
+                  });
+
+                  const data = await response.json();
+                  if (data.success) {
+                    alert("Success: " + data.message);
+                    e.target.reset();
+                  } else {
+                    alert("Server Error: " + data.message);
+                  }
+                } catch (err) {
+                  console.error("Submission error:", err);
+                  alert("Network Error: " + err.message);
+                }
               }}
             >
               <div className="club-form-grid">
                 <div className="club-input-group club-floating">
-                  <input type="text" required placeholder=" " />
+                  <input type="text" required placeholder=" " name="first_name" />
                   <label>First Name *</label>
                 </div>
 
                 <div className="club-input-group club-floating">
-                  <input type="text" required placeholder=" " />
+                  <input type="text" required placeholder=" " name="last_name" />
                   <label>Last Name *</label>
                 </div>
 
                 <div className="club-input-group club-floating">
-                  <input type="email" required placeholder=" " />
+                  <input type="email" required placeholder=" " name="email" />
                   <label>Email *</label>
                 </div>
 
                 <div className="club-input-group club-floating">
-                  <input type="tel" required placeholder=" " />
+                  <input type="tel" required placeholder=" " name="phone" />
                   <label>Phone Number *</label>
                 </div>
 
                 <div className="club-input-group">
                   <label>Primary Role *</label>
-                  <select required>
+                  <select required name="role">
                     <option value="">Select Role</option>
                     <option>Point Guard</option>
                     <option>Shooting Guard</option>
@@ -298,7 +322,7 @@ export default function Basketball() {
 
                 <div className="club-input-group">
                   <label>Highest Level Played *</label>
-                  <select required>
+                  <select required name="level">
                     <option value="">Select Level</option>
                     <option>School / Local</option>
                     <option>District</option>
@@ -307,12 +331,17 @@ export default function Basketball() {
                 </div>
 
                 <div className="club-input-group club-floating club-full">
-                  <textarea placeholder=" " />
+                  <textarea placeholder=" " name="achievements" />
                   <label>Key achievements / tournaments</label>
                 </div>
               </div>
 
-              <button type="submit" className="club-btn-full">
+              <button
+                type="submit"
+                className="club-btn-full"
+                onClick={() => alert("Button Clicked!")}
+                style={{ zIndex: 9999, position: 'relative' }}
+              >
                 Submit Tryout Application
               </button>
             </form>
