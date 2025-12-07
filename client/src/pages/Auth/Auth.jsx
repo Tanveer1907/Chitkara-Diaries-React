@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import AuthNavbar from "../../components/navbar/authnavbar";
+
 import "./auth.css";
 import loaderLogo from "../../assets/logo.jpg";
 
@@ -124,8 +124,7 @@ export default function Auth() {
 
   return (
     <>
-      <AuthNavbar />
-      <div style={{ paddingTop: 80 }} />
+
 
       <div className="login-container">
         <div className="login-wrapper">
@@ -195,6 +194,7 @@ export default function Auth() {
                     <div className="input-wrapper">
                       <i className="fas fa-envelope input-icon"></i>
                       <input
+                        required
                         type="email"
                         name="email"
                         placeholder="Enter your email"
@@ -211,6 +211,7 @@ export default function Auth() {
                     <div className="input-wrapper">
                       <i className="fas fa-lock input-icon"></i>
                       <input
+                        required
                         type="password"
                         id="login-password"
                         name="password"
@@ -245,6 +246,7 @@ export default function Auth() {
                     <div className="input-wrapper">
                       <i className="fas fa-user input-icon"></i>
                       <input
+                        required
                         type="text"
                         name="fullname"
                         placeholder="Enter your full name"
@@ -262,6 +264,7 @@ export default function Auth() {
                     <div className="input-wrapper">
                       <i className="fas fa-id-card input-icon"></i>
                       <input
+                        required
                         type="text"
                         name="roll"
                         placeholder="Enter roll number"
@@ -279,6 +282,7 @@ export default function Auth() {
                     <div className="input-wrapper">
                       <i className="fas fa-calendar input-icon"></i>
                       <select
+                        required
                         name="batch"
                         value={registerData.batch}
                         onChange={(e) =>
@@ -300,6 +304,7 @@ export default function Auth() {
                     <div className="input-wrapper">
                       <i className="fas fa-graduation-cap input-icon"></i>
                       <select
+                        required
                         name="course"
                         value={registerData.course}
                         onChange={(e) =>
@@ -321,6 +326,7 @@ export default function Auth() {
                     <div className="input-wrapper">
                       <i className="fas fa-envelope input-icon"></i>
                       <input
+                        required
                         type="email"
                         name="email"
                         placeholder="Enter your email"
@@ -338,6 +344,7 @@ export default function Auth() {
                     <div className="input-wrapper">
                       <i className="fas fa-lock input-icon"></i>
                       <input
+                        required
                         type="password"
                         id="register-password"
                         name="password"

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
     --primary: #621414;
     --primary-dark: #4e0f0f;
@@ -39,47 +41,8 @@ body {
     right: 0;
     z-index: 1000;
     box-shadow: var(--shadow-sm);
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: auto;
-    padding: 0.75rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--primary);
-}
-
-.logo i {
-    font-size: 1.8rem;
-}
-
-.nav-link {
-    text-decoration: none;
-    color: var(--text);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    padding: 6px 14px;
-    border-radius: 6px;
-    transition: var(--transition);
-}
-
-.nav-link:hover {
-    position: relative;
-    overflow: hidden;
-    border-radius: 20px 0 0 20px !important;
+    display: none;
+    /* Hide navbar on auth page if shared css is used elsewhere or just ensuring it's gone */
 }
 
 /* Layout */
@@ -87,7 +50,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 80px 20px 200px;
+    padding: 40px 20px;
+    /* Reduced top padding since navbar is gone */
     min-height: 100vh;
 }
 
@@ -229,16 +193,41 @@ body {
     font-size: 1.1rem;
     color: #7a7a7a;
     pointer-events: none;
+    right: auto;
+    /* ensure right is auto for left icons */
 }
 
 .input-wrapper input,
 .input-wrapper select {
     width: 100%;
-    padding: 12px 14px 12px 45px !important;
+    height: 48px;
+    /* Enforce explicit height for consistency */
+    padding: 10px 14px 10px 45px !important;
     border: 2px solid #e2e8f0;
     border-radius: 10px;
     font-size: 0.95rem;
     transition: var(--transition);
+    appearance: none;
+    /* Normalize browser standard styles */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-form {
+    animation: slideUpFade 0.5s ease-out;
 }
 
 .input-wrapper input:focus,
@@ -362,7 +351,7 @@ body {
 
 @media (max-width: 480px) {
     .login-container {
-        padding: 70px 12px 15px;
+        padding: 40px 12px 15px;
     }
 
     .hero-content h1 {
@@ -381,7 +370,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -391,13 +380,50 @@ body {
     transition: opacity 0.6s ease;
 }
 
+.loader-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    /* Make it circular */
+    object-fit: cover;
+    animation: pulse-spin 2s infinite ease-in-out;
+    box-shadow: 0 0 20px rgba(98, 20, 20, 0.2);
+}
 
+@keyframes pulse-spin {
+    0% {
+        transform: scale(0.95) rotate(0deg);
+        box-shadow: 0 0 0 0 rgba(98, 20, 20, 0.7);
+    }
+
+    50% {
+        transform: scale(1.1) rotate(180deg);
+        box-shadow: 0 0 0 20px rgba(98, 20, 20, 0);
+    }
+
+    100% {
+        transform: scale(0.95) rotate(360deg);
+        box-shadow: 0 0 0 0 rgba(98, 20, 20, 0);
+    }
+}
 
 .loader-text {
-    margin-top: 15px;
-    font-size: 1.2rem;
+    margin-top: 20px;
+    font-size: 1.3rem;
     color: #621414;
-    font-weight: bold;
+    font-weight: 700;
+    letter-spacing: 1px;
+    animation: fade 1.5s infinite alternate;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0.6;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 /* Error message */
@@ -415,24 +441,24 @@ body {
     display: flex;
     justify-content: center;
     margin-bottom: 22px;
-    background: #eee;
-    border-radius: 8px;
-    padding: 4px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    padding: 6px;
 }
 
 .tab-nav button {
     flex: 1;
     /* Makes buttons equal width */
-    padding: 9px 25px;
+    padding: 10px 25px;
     margin: 0;
     /* Removed margin */
     background: transparent;
     /* Inactive buttons are clear */
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     /* Rounded corners for the "slider" */
     font-weight: 600;
-    color: #621414;
+    color: #64748b;
     /* Inactive text color */
     transition: all 0.3s ease;
     cursor: pointer;
@@ -446,10 +472,4 @@ body {
 }
 
 /* --- INPUT ICON STYLES --- */
-.input-wrapper {
-    position: relative;
-}
-
-.input-icon {
-    right: 45px;
-}
+/* (Handled by .input-icon definition above) */
