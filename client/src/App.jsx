@@ -12,22 +12,28 @@ import Panache from "./pages/Panache/panache";
 import Clubs from "./pages/Clubs/clubs";
 import Natraj from "./pages/Natraj/natraj";
 import Journal from "./pages/Journal/journal";
+import PageTransition from "./components/PageTransition/PageTransition";
+import Layout from "./components/Layout/Layout";
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/auth/*" element={<Auth />} />
-        <Route path="/voting" element={<VotingPg />} />
-        <Route path="/" element={<HomePage />} />
-        <Route path="/osc" element={<OSC />} />
-        <Route path="/ieee" element={<IEEE />} />
-        <Route path="/cricket" element={<Cricket />} />
-        <Route path="/basketball" element={<Basketball />} />
-        <Route path="/panache" element={<Panache />} />
-        <Route path="/clubs" element={<Clubs />} />
-        <Route path="/natraj" element={<Natraj />} />
-        <Route path="/journal" element={<Journal />} />
+        <Route path="/auth/*" element={<PageTransition><Auth /></PageTransition>} />
+
+        {/* Main App Layout with Fixed Navbar */}
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/voting" element={<VotingPg />} />
+          <Route path="/osc" element={<OSC />} />
+          <Route path="/ieee" element={<IEEE />} />
+          <Route path="/cricket" element={<Cricket />} />
+          <Route path="/basketball" element={<Basketball />} />
+          <Route path="/panache" element={<Panache />} />
+          <Route path="/clubs" element={<Clubs />} />
+          <Route path="/natraj" element={<Natraj />} />
+          <Route path="/journal" element={<Journal />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

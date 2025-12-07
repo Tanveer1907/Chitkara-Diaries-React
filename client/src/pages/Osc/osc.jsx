@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./osc.css";
 import "../../styles/club-form.css";
-import MainNavbar from "../../components/navbar/main_navbar";
 import ClubFooter from "../../components/ClubFooter/ClubFooter";
 import StatusFeedback from "../../components/StatusFeedback/StatusFeedback.jsx";
 

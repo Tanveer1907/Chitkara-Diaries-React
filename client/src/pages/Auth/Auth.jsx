@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import "./auth.css";
 import loaderLogo from "../../assets/logo.jpg";
@@ -25,6 +25,33 @@ export default function Auth() {
 
   const [loginError, setLoginError] = useState("");
   const [registerError, setRegisterError] = useState("");
+
+  // Refs for smooth height transition
+  const loginFormRef = useRef(null);
+  const registerFormRef = useRef(null);
+  const viewportFrameRef = useRef(null);
+
+  // Update height when switching tabs
+  useEffect(() => {
+    const updateHeight = () => {
+      if (viewportFrameRef.current) {
+        const activeHeight = showLogin
+          ? loginFormRef.current?.clientHeight
+          : registerFormRef.current?.clientHeight;
+
+        if (activeHeight) {
+          viewportFrameRef.current.style.height = `${activeHeight}px`;
+        }
+      }
+    };
+
+    // Initial update
+    updateHeight();
+
+    // Small timeout to ensure DOM is updated (although standard render should be enough, helpful for layout shifts)
+    const timer = setTimeout(updateHeight, 50);
+    return () => clearTimeout(timer);
+  }, [showLogin]);
 
   // ---------------- LOGIN ----------------
   const handleLogin = async (e) => {
@@ -180,191 +207,197 @@ export default function Auth() {
                 </button>
               </div>
 
-              {/* ----------- LOGIN FORM ----------- */}
-              {showLogin ? (
-                <form className="login-form" onSubmit={handleLogin}>
+              {/* ----------- FORM SLIDER ----------- */}
+              <div className="forms-viewport" ref={viewportFrameRef} style={{ transition: "height 0.5s ease" }}>
+                <div className={`forms-slider ${showLogin ? "slide-login" : "slide-register"}`}>
 
-                  <div className="form-header">
-                    <h2>Student Login</h2>
-                    <p>Enter your details to access your account</p>
+                  {/* SLIDE 1: LOGIN */}
+                  <div className="form-slide login-slide" ref={loginFormRef}>
+                    <form className="login-form" onSubmit={handleLogin}>
+                      <div className="form-header">
+                        <h2>Student Login</h2>
+                        <p>Enter your details to access your account</p>
+                      </div>
+
+                      <div className="form-group">
+                        <label>Email</label>
+                        <div className="input-wrapper">
+                          <i className="fas fa-envelope input-icon"></i>
+                          <input
+                            required
+                            type="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            value={loginData.email}
+                            onChange={(e) =>
+                              setLoginData({ ...loginData, email: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+
+                      <div className="form-group password-wrapper">
+                        <label>Password</label>
+                        <div className="input-wrapper">
+                          <i className="fas fa-lock input-icon"></i>
+                          <input
+                            required
+                            type="password"
+                            id="login-password"
+                            name="password"
+                            placeholder="Enter your password"
+                            value={loginData.password}
+                            onChange={(e) =>
+                              setLoginData({ ...loginData, password: e.target.value })
+                            }
+                          />
+
+                          <span className="password-toggle" onClick={() => togglePassword("login-password")}>
+                            <i className="fa fa-eye"></i>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="error-message">{loginError}</div>
+                      <button type="submit" className="login-btn">Login to Chitkara Diaries</button>
+                    </form>
                   </div>
 
-                  <div className="form-group">
-                    <label>Email</label>
-                    <div className="input-wrapper">
-                      <i className="fas fa-envelope input-icon"></i>
-                      <input
-                        required
-                        type="email"
-                        name="email"
-                        placeholder="Enter your email"
-                        value={loginData.email}
-                        onChange={(e) =>
-                          setLoginData({ ...loginData, email: e.target.value })
-                        }
-                      />
-                    </div>
+                  {/* SLIDE 2: REGISTER */}
+                  <div className="form-slide register-slide" ref={registerFormRef}>
+                    <form className="login-form" onSubmit={handleRegister}>
+                      <div className="form-header">
+                        <h2>Create Account</h2>
+                        <p>Sign up to get started</p>
+                      </div>
+
+                      {/* FULL NAME */}
+                      <div className="form-group">
+                        <label>Full Name</label>
+                        <div className="input-wrapper">
+                          <i className="fas fa-user input-icon"></i>
+                          <input
+                            required
+                            type="text"
+                            name="fullname"
+                            placeholder="Enter your full name"
+                            value={registerData.fullname}
+                            onChange={(e) =>
+                              setRegisterData({ ...registerData, fullname: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+
+                      {/* ROLL */}
+                      <div className="form-group">
+                        <label>Roll Number</label>
+                        <div className="input-wrapper">
+                          <i className="fas fa-id-card input-icon"></i>
+                          <input
+                            required
+                            type="text"
+                            name="roll"
+                            placeholder="Enter roll number"
+                            value={registerData.roll}
+                            onChange={(e) =>
+                              setRegisterData({ ...registerData, roll: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+
+                      {/* BATCH */}
+                      <div className="form-group">
+                        <label>Batch Year</label>
+                        <div className="input-wrapper">
+                          <i className="fas fa-calendar input-icon"></i>
+                          <select
+                            required
+                            name="batch"
+                            value={registerData.batch}
+                            onChange={(e) =>
+                              setRegisterData({ ...registerData, batch: e.target.value })
+                            }
+                          >
+                            <option value="" disabled>Select batch year</option>
+                            <option value="2021">2021</option>
+                            <option value="2022">2022</option>
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* COURSE */}
+                      <div className="form-group">
+                        <label>Course</label>
+                        <div className="input-wrapper">
+                          <i className="fas fa-graduation-cap input-icon"></i>
+                          <select
+                            required
+                            name="course"
+                            value={registerData.course}
+                            onChange={(e) =>
+                              setRegisterData({ ...registerData, course: e.target.value })
+                            }
+                          >
+                            <option value="" disabled>Select your course</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="BCA">BCA</option>
+                            <option value="MBA">MBA</option>
+                            <option value="M.Tech">M.Tech</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* EMAIL */}
+                      <div className="form-group">
+                        <label>Email Address</label>
+                        <div className="input-wrapper">
+                          <i className="fas fa-envelope input-icon"></i>
+                          <input
+                            required
+                            type="email"
+                            name="email"
+                            placeholder="Enter your email"
+                            value={registerData.email}
+                            onChange={(e) =>
+                              setRegisterData({ ...registerData, email: e.target.value })
+                            }
+                          />
+                        </div>
+                      </div>
+
+                      {/* PASSWORD */}
+                      <div className="form-group password-wrapper">
+                        <label>Password</label>
+                        <div className="input-wrapper">
+                          <i className="fas fa-lock input-icon"></i>
+                          <input
+                            required
+                            type="password"
+                            id="register-password"
+                            name="password"
+                            placeholder="Create your password"
+                            value={registerData.password}
+                            onChange={(e) =>
+                              setRegisterData({ ...registerData, password: e.target.value })
+                            }
+                          />
+
+                          <span className="password-toggle" onClick={() => togglePassword("register-password")}>
+                            <i className="fa fa-eye"></i>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="error-message">{registerError}</div>
+                      <button type="submit" className="login-btn">Create Account</button>
+                    </form>
                   </div>
-
-                  <div className="form-group password-wrapper">
-                    <label>Password</label>
-                    <div className="input-wrapper">
-                      <i className="fas fa-lock input-icon"></i>
-                      <input
-                        required
-                        type="password"
-                        id="login-password"
-                        name="password"
-                        placeholder="Enter your password"
-                        value={loginData.password}
-                        onChange={(e) =>
-                          setLoginData({ ...loginData, password: e.target.value })
-                        }
-                      />
-
-                      <span className="password-toggle" onClick={() => togglePassword("login-password")}>
-                        <i className="fa fa-eye"></i>
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="error-message">{loginError}</div>
-                  <button type="submit" className="login-btn">Login to Chitkara Diaries</button>
-                </form>
-              ) : (
-                // ----------- REGISTER FORM -----------
-                <form className="login-form" onSubmit={handleRegister}>
-
-                  <div className="form-header">
-                    <h2>Create Account</h2>
-                    <p>Sign up to get started</p>
-                  </div>
-
-                  {/* FULL NAME */}
-                  <div className="form-group">
-                    <label>Full Name</label>
-                    <div className="input-wrapper">
-                      <i className="fas fa-user input-icon"></i>
-                      <input
-                        required
-                        type="text"
-                        name="fullname"
-                        placeholder="Enter your full name"
-                        value={registerData.fullname}
-                        onChange={(e) =>
-                          setRegisterData({ ...registerData, fullname: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-
-                  {/* ROLL */}
-                  <div className="form-group">
-                    <label>Roll Number</label>
-                    <div className="input-wrapper">
-                      <i className="fas fa-id-card input-icon"></i>
-                      <input
-                        required
-                        type="text"
-                        name="roll"
-                        placeholder="Enter roll number"
-                        value={registerData.roll}
-                        onChange={(e) =>
-                          setRegisterData({ ...registerData, roll: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-
-                  {/* BATCH */}
-                  <div className="form-group">
-                    <label>Batch Year</label>
-                    <div className="input-wrapper">
-                      <i className="fas fa-calendar input-icon"></i>
-                      <select
-                        required
-                        name="batch"
-                        value={registerData.batch}
-                        onChange={(e) =>
-                          setRegisterData({ ...registerData, batch: e.target.value })
-                        }
-                      >
-                        <option value="" disabled>Select batch year</option>
-                        <option value="2021">2021</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* COURSE */}
-                  <div className="form-group">
-                    <label>Course</label>
-                    <div className="input-wrapper">
-                      <i className="fas fa-graduation-cap input-icon"></i>
-                      <select
-                        required
-                        name="course"
-                        value={registerData.course}
-                        onChange={(e) =>
-                          setRegisterData({ ...registerData, course: e.target.value })
-                        }
-                      >
-                        <option value="" disabled>Select your course</option>
-                        <option value="B.Tech">B.Tech</option>
-                        <option value="BCA">BCA</option>
-                        <option value="MBA">MBA</option>
-                        <option value="M.Tech">M.Tech</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* EMAIL */}
-                  <div className="form-group">
-                    <label>Email Address</label>
-                    <div className="input-wrapper">
-                      <i className="fas fa-envelope input-icon"></i>
-                      <input
-                        required
-                        type="email"
-                        name="email"
-                        placeholder="Enter your email"
-                        value={registerData.email}
-                        onChange={(e) =>
-                          setRegisterData({ ...registerData, email: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-
-                  {/* PASSWORD */}
-                  <div className="form-group password-wrapper">
-                    <label>Password</label>
-                    <div className="input-wrapper">
-                      <i className="fas fa-lock input-icon"></i>
-                      <input
-                        required
-                        type="password"
-                        id="register-password"
-                        name="password"
-                        placeholder="Create your password"
-                        value={registerData.password}
-                        onChange={(e) =>
-                          setRegisterData({ ...registerData, password: e.target.value })
-                        }
-                      />
-
-                      <span className="password-toggle" onClick={() => togglePassword("register-password")}>
-                        <i className="fa fa-eye"></i>
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="error-message">{registerError}</div>
-                  <button type="submit" className="login-btn">Create Account</button>
-                </form>
-              )}
+                </div>
+              </div>
 
             </div>
           </div>

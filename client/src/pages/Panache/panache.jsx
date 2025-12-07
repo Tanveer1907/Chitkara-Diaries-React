@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./panache.css";
 import "../../styles/club-form.css";
-import MainNavbar from "../../components/navbar/main_navbar.jsx";
 import ClubFooter from "../../components/ClubFooter/ClubFooter.jsx";
 import StatusFeedback from "../../components/StatusFeedback/StatusFeedback.jsx";
 
@@ -25,7 +24,6 @@ export default function Panache() {
 
   return (
     <>
-      <MainNavbar />
 
       {/* FEEDBACK COMPONENT */}
       <StatusFeedback

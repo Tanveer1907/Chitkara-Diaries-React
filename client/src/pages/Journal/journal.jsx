@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./journal.css";
-import MainNavbar from "../../components/navbar/main_navbar";
+import Footer from "../../components/footer";
 
 import j1 from "../../assets/j1.mp4";
 import j2 from "../../assets/j2.mp4";
@@ -65,7 +65,6 @@ export default function Journal() {
 
   return (
     <div className="journal-root">
-      <MainNavbar />
 
       <header className="journal-header">
         Our Journals — From The Books of Our Students
@@ -156,9 +155,7 @@ export default function Journal() {
         </div>
       </div>
 
-      <footer className="footer">
-        © 2025 Chitkara Diaries — All Rights Reserved
-      </footer>
+      <Footer />
     </div>
   );
 }

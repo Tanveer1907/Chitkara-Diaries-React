@@ -227,7 +227,9 @@ body {
 }
 
 .login-form {
-    animation: slideUpFade 0.5s ease-out;
+    /* animation: slideUpFade 0.5s ease-out; DISABLED for slider */
+    width: 100%;
+    padding: 10px;
 }
 
 .input-wrapper input:focus,
@@ -473,3 +475,53 @@ body {
 
 /* --- INPUT ICON STYLES --- */
 /* (Handled by .input-icon definition above) */
+
+/* --- AUTH SLIDER TRANSITION --- */
+.forms-viewport {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    transition: height 0.5s ease;
+}
+
+.forms-slider {
+    display: flex;
+    width: 200%;
+    /* 2 forms side by side */
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    /* Bouncy Effect */
+    align-items: flex-start;
+}
+
+.form-slide {
+    width: 50%;
+    /* Ensure content is centered if needed, but width 50% of 200% = 100% of Viewport */
+    flex-shrink: 0;
+    transition: opacity 0.4s ease;
+}
+
+/* Transform States */
+.forms-slider.slide-login {
+    transform: translateX(0%);
+}
+
+.forms-slider.slide-register {
+    transform: translateX(-50%);
+}
+
+/* Optional: Fade out inactive form slightly */
+.forms-slider.slide-login .register-slide {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.forms-slider.slide-register .login-slide {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.forms-slider.slide-login .login-slide,
+.forms-slider.slide-register .register-slide {
+    opacity: 1;
+    pointer-events: auto;
+}

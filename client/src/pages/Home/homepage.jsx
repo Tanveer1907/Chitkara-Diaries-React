@@ -1,5 +1,4 @@
 import React from "react";
-import MainNavbar from "../../components/navbar/main_navbar";
 import HeroSection from "../../components/herosection";
 import CampusMap from "../../components/campusmap";
 import LocationCards from "../../components/locationcards";
@@ -10,7 +9,6 @@ import "./homepage.css";
 export default function HomePage() {
   return (
     <>
-      <MainNavbar />
       <div id="top" style={{ paddingTop: 0 }}></div> {/* offset for fixed navbar */}
       <main>
         <HeroSection />

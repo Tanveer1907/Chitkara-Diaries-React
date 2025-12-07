@@ -83,8 +83,8 @@ body {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  position: fixed;
-  top: 0;
+  /* position: fixed; removed to allow sticky layout */
+  /* top: 0; removed */
   width: 100%;
   z-index: 1000;
   box-shadow: 0 8px 32px rgba(98, 20, 20, 0.08);

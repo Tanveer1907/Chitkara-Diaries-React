@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./ieee.css";
 import "../../styles/club-form.css";
-import MainNavbar from "../../components/navbar/main_navbar.jsx";
 import ClubFooter from "../../components/ClubFooter/ClubFooter.jsx";
 import StatusFeedback from "../../components/StatusFeedback/StatusFeedback.jsx";
 

@@ -14,7 +14,6 @@ import panacheImg from "../../assets/panache.png";
 export default function Clubs() {
   return (
     <>
-      <MainNavbar />
 
       {/* Page header */}
       <header className="page-header">

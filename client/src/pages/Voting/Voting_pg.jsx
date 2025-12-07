@@ -1,6 +1,6 @@
 // src/pages/Voting/Voting_pg.jsx
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import MainNavbar from "../../components/navbar/main_navbar";
+import Footer from "../../components/footer";
 import "./Voting_pg.css";
 
 /*
@@ -439,7 +439,6 @@ export default function VotingPg() {
 
   return (
     <>
-      <MainNavbar />
       <div id="top" style={{ paddingTop: 0 }}></div>
 
       <div className="main">
@@ -945,6 +944,7 @@ export default function VotingPg() {
           </div>
         </div>
       )}
+      <Footer />
     </>
   );
 }
