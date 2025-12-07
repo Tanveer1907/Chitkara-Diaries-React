@@ -3,6 +3,7 @@ import "./cricket.css";
 import "../../styles/club-form.css";
 import MainNavbar from "../../components/navbar/main_navbar.jsx";
 import ClubFooter from "../../components/ClubFooter/ClubFooter.jsx";
+import StatusFeedback from "../../components/StatusFeedback/StatusFeedback.jsx";
 
 // Adjust these paths to match your actual files
 import heroVideo from "../../assets/cricketvid.mp4";
@@ -13,8 +14,15 @@ import strip3 from "../../assets/ckt3.jpg";
 import strip4 from "../../assets/ckt4.jpg";
 import strip5 from "../../assets/ckt5.jpg";
 
+
 export default function Cricket() {
   const stripImages = [strip1, strip2, strip3, strip4, strip5];
+
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    error: ""
+  });
 
   const [stats, setStats] = useState({
     runs: 0,
@@ -72,6 +80,13 @@ export default function Cricket() {
   return (
     <div className="cricket-page">
       <MainNavbar />
+
+      {/* FEEDBACK COMPONENT */}
+      <StatusFeedback
+        loading={status.loading}
+        success={status.success}
+        onClose={() => setStatus({ ...status, success: false })}
+      />
 
       {/* ===== HERO SECTION ===== */}
       <section className="cricket-hero">
@@ -249,12 +264,14 @@ export default function Cricket() {
 
           <form className="club-form" onSubmit={async (e) => {
             e.preventDefault();
-            console.log("Form submitted");
+            setStatus({ loading: true, success: false, error: "" });
 
             try {
               const form = new FormData(e.target);
               const formData = Object.fromEntries(form.entries());
-              console.log("Sending data:", formData);
+
+              // Simulate small delay
+              await new Promise(r => setTimeout(r, 800));
 
               const response = await fetch("/api/cricket/add", {
                 method: "POST",
@@ -262,18 +279,17 @@ export default function Cricket() {
                 body: JSON.stringify(formData),
               });
 
-              console.log("Response status:", response.status);
               const data = await response.json();
-              console.log("Response data:", data);
 
               if (data.success) {
-                alert("Registration submitted for Cricket trials!");
+                setStatus({ loading: false, success: true, error: "" });
                 e.target.reset();
               } else {
+                setStatus({ loading: false, success: false, error: data.message });
                 alert("Error from server: " + data.message);
               }
             } catch (err) {
-              console.error("Submission error:", err);
+              setStatus({ loading: false, success: false, error: err.message });
               alert("Submission failed: " + err.message);
             }
           }}>
@@ -328,7 +344,6 @@ export default function Cricket() {
             <button
               type="submit"
               className="club-btn-full"
-              onClick={() => alert("Button Clicked!")}
               style={{ zIndex: 9999, position: 'relative' }}
             >
               Submit Registration

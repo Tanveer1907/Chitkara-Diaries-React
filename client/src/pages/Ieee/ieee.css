@@ -1,6 +1,6 @@
-
 .top-gap {
-  margin-top: 120px; /* same as Home, Clubs, etc */
+    margin-top: 120px;
+    /* same as Home, Clubs, etc */
 }
 
 /* ---------------- CONTAINER 1: MOVING IMAGES ---------------- */
@@ -38,14 +38,19 @@
 }
 
 @keyframes moveLeft {
-    0% { transform: translateX(100vw); }
-    100% { transform: translateX(-50%); }
+    0% {
+        transform: translateX(100vw);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 /* ---------------- CONTAINER 2: ABOUT US ---------------- */
 .about-container {
     max-width: 97%;
-    height: 750px;
+    min-height: 750px;
     margin: auto;
     padding: 20px 10px;
     background: #ffffff;
@@ -155,12 +160,12 @@
     transition: all 0.2s ease;
 }
 
-.form-group input:focus + label,
-.form-group input:not(:placeholder-shown) + label,
-.form-group select:focus + label,
-.form-group select:not([value=""]) + label,
-.form-group textarea:focus + label,
-.form-group textarea:not(:placeholder-shown) + label {
+.form-group input:focus+label,
+.form-group input:not(:placeholder-shown)+label,
+.form-group select:focus+label,
+.form-group select:not([value=""])+label,
+.form-group textarea:focus+label,
+.form-group textarea:not(:placeholder-shown)+label {
     top: -9px;
     left: 10px;
     font-size: 0.8rem;
@@ -238,71 +243,71 @@
 
 /* CLEAN WHITE FOOTER */
 .clean-footer {
-  width: 100%;
-  background: #ffffff;
-  padding: 50px 80px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  border-top: 2px solid #e5e5e5;
-  flex-wrap: wrap;
+    width: 100%;
+    background: #ffffff;
+    padding: 50px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-top: 2px solid #e5e5e5;
+    flex-wrap: wrap;
 }
 
 .footer-left h3,
 .footer-right h3 {
-  font-size: 22px;
-  color: #222;
-  margin-bottom: 15px;
+    font-size: 22px;
+    color: #222;
+    margin-bottom: 15px;
 }
 
 .footer-left p {
-  font-size: 16px;
-  color: #444;
-  margin: 4px 0;
+    font-size: 16px;
+    color: #444;
+    margin: 4px 0;
 }
 
 /* ICONS STYLING */
 .footer-icons {
-  display: flex;
-  gap: 20px;
+    display: flex;
+    gap: 20px;
 }
 
 .footer-icons a {
-  width: 45px;
-  height: 45px;
-  background: #f1f1f1;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 22px;
-  color: #333;
-  transition: 0.3s ease;
+    width: 45px;
+    height: 45px;
+    background: #f1f1f1;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    color: #333;
+    transition: 0.3s ease;
 }
 
 /* HOVER COLORS */
 .footer-icons .linkedin:hover {
-  background: #0e76a8;
-  color: white;
+    background: #0e76a8;
+    color: white;
 }
 
 .footer-icons .instagram:hover {
-  background: #e1306c;
-  color: white;
+    background: #e1306c;
+    color: white;
 }
 
 .footer-icons .youtube:hover {
-  background: #ff0000;
-  color: white;
+    background: #ff0000;
+    color: white;
 }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .clean-footer {
-    flex-direction: column;
-    gap: 40px;
-    padding: 40px 25px;
-  }
+    .clean-footer {
+        flex-direction: column;
+        gap: 40px;
+        padding: 40px 25px;
+    }
 }
 
 
@@ -313,14 +318,19 @@
     width: 50%;
 }
 
-.timeline-item.left { left: 0; }
-.timeline-item.right { left: 50%; }
+.timeline-item.left {
+    left: 0;
+}
+
+.timeline-item.right {
+    left: 50%;
+}
 
 .timeline-content {
     background: #be8383;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
     transition: 0.3s ease;
 }
 
@@ -372,6 +382,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 /* Using hardcoded colors based on user request: Accent: #E84C3D, Theme: White, Text: #333 */
 
 /* --- GENERAL UTILITIES & LAYOUT --- */
@@ -403,7 +414,8 @@
     gap: 40px;
     align-items: stretch;
     padding: 60px 20px;
-    background-color: #E84C3D; /* RED BACKGROUND for the container/gap area */
+    background-color: #E84C3D;
+    /* RED BACKGROUND for the container/gap area */
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
@@ -417,7 +429,7 @@
 
 .member-registration-column {
     padding: 40px;
-    background-color: white; 
+    background-color: white;
     color: #333;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -466,10 +478,11 @@
 .form-group textarea,
 .form-group select {
     width: 100%;
-    padding: 15px 10px 5px 10px; 
+    padding: 15px 10px 5px 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #f5f5f5; /* Light input field background */
+    background-color: #f5f5f5;
+    /* Light input field background */
     color: #333;
     font-size: 1rem;
     transition: all 0.2s ease;
@@ -498,15 +511,15 @@
     background-color: transparent;
 }
 
-.form-group.floating-label input:not(:placeholder-shown) + label,
-.form-group.floating-label input:focus + label,
-.form-group.floating-label textarea:not(:placeholder-shown) + label,
-.form-group.floating-label textarea:focus + label {
+.form-group.floating-label input:not(:placeholder-shown)+label,
+.form-group.floating-label input:focus+label,
+.form-group.floating-label textarea:not(:placeholder-shown)+label,
+.form-group.floating-label textarea:focus+label {
     top: 5px;
     transform: translateY(0);
     font-size: 0.75rem;
     color: #110201;
-    background-color: white; 
+    background-color: white;
     padding: 0 5px;
     left: 5px;
     z-index: 10;
@@ -515,9 +528,9 @@
 /* FIX FOR DROPDOWN ISSUE (Popdown) - Static Labels */
 .form-group label[for="regDepartment"],
 .form-group label[for="regLevel"] {
-    position: static; 
+    position: static;
     display: block;
-    margin-bottom: 5px; 
+    margin-bottom: 5px;
     font-size: 0.9rem;
     color: #333;
     font-weight: bold;
@@ -546,12 +559,13 @@
 }
 
 .submit-btn:hover {
-    background-color: #c0392b; /* Darker red on hover */
+    background-color: #c0392b;
+    /* Darker red on hover */
 }
 
 /* Input error highlighting */
 .input-error {
-    border: 2px solid #E84C3D !important; 
+    border: 2px solid #E84C3D !important;
     box-shadow: 0 0 5px rgba(232, 76, 61, 0.7);
 }
 
@@ -561,19 +575,25 @@
     flex: 1;
     min-width: 300px;
     padding: 50px 20px;
-    background-color: #a84e4e; /* Maroon Background */
+    background-color: #672a2a;
     color: #fff;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    box-shadow: 0 4px 15px rgb(255, 162, 162);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    /* Removed overflow: hidden to prevent text cut-off */
 }
 
 .spotlight-title {
-    color: #fff; 
-    border-bottom-color: #E84C3D;
+    color: #fff;
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    text-transform: uppercase;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #E84C3D;
     width: 100%;
 }
 
@@ -581,9 +601,13 @@
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    border: 4px solid #000000;
+    border: 4px solid #E84C3D;
     margin-bottom: 20px;
-    background: #ffffff; 
+    background: #444;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .player-details h3 {
@@ -613,6 +637,7 @@
     width: 100%;
     max-width: 250px;
 }
+
 .player-details ul {
     list-style: none;
     padding: 0;
@@ -627,7 +652,7 @@
 }
 
 .stat-item {
-    background: rgb(0, 0, 0); 
+    background: rgb(0, 0, 0);
     padding: 10px;
     border-radius: 5px;
     margin-top: 10px;
@@ -643,7 +668,7 @@
 /* --- UPCOMING EVENTS SECTION --- */
 
 .events-section {
-    background-color: #e7e9ec; 
+    background-color: #e7e9ec;
     color: #f5f6fa;
 }
 
@@ -651,7 +676,7 @@
     font-family: 'Impact', 'Arial Black', sans-serif;
     font-size: 2.5rem;
     text-align: center;
-    color: #E84C3D; 
+    color: #E84C3D;
     text-transform: uppercase;
     margin-bottom: 40px;
 }
@@ -665,7 +690,8 @@
 .event-card {
     display: flex;
     align-items: center;
-    background-color: #ab8080; /* Card background */
+    background-color: #ab8080;
+    /* Card background */
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
@@ -673,7 +699,7 @@
 .event-date-box {
     flex-shrink: 0;
     width: 90px;
-    min-height: 100px; 
+    min-height: 100px;
     background-color: #E84C3D;
     display: flex;
     flex-direction: column;
@@ -701,7 +727,7 @@
 
 .event-description {
     font-size: 0.9rem;
-    color: #bdc3c7; 
+    color: #bdc3c7;
     margin-bottom: 10px;
 }
 
@@ -710,22 +736,24 @@
     color: #ffffff;
     font-weight: bold;
 }
+
 /* FIX: Event card text visible */
 .event-card {
-  background: white;
-  color: #333;
+    background: white;
+    color: #333;
 }
 
 .event-card h3,
 .event-card p,
 .event-location {
-  color: #333 !important;
+    color: #333 !important;
 }
 
 /* Date box ke andar text */
 .event-date-box .month,
 .event-date-box .day {
-  color: #c62828; /* red */
+    color: #c62828;
+    /* red */
 }
 
 
@@ -736,66 +764,18 @@
         gap: 20px;
         padding: 40px 15px;
     }
+
     .form-grid {
         grid-template-columns: 1fr;
     }
+
     .member-registration-column,
     .player-spotlight-column {
         padding: 30px 20px;
     }
 }
-/* --- LEADER SPOTLIGHT COLUMN STYLING --- */
 
-.player-spotlight-column {
-    flex: 1;
-    min-width: 300px;
-    padding: 50px 20px;
-    /* Dark background for contrast */
-    background-color: #672a2a; 
-    color: #fff;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-}
-
-.spotlight-title {
-    color: #fff; 
-    font-family: 'Impact', 'Arial Black', sans-serif;
-    text-transform: uppercase;
-    font-size: 2rem;
-    margin-bottom: 30px;
-    padding-bottom: 10px;
-    /* Red accent under the title */
-    border-bottom: 3px solid #E84C3D; 
-    width: 100%;
-}
-
-/* --- IMAGE CONTAINER STYLING --- */
-
-.player-photo-placeholder {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%; /* Makes it circular */
-    /* Red accent border */
-    border: 4px solid #E84C3D;
-    margin-bottom: 20px;
-    background: #444; /* Fallback background color */
-    overflow: hidden; /* Crucial to clip the image to the circle */
-    display: flex; 
-    justify-content: center;
-    align-items: center;
-}
-
-.leader-profile-img {
-    width: 100%;           /* Image fills the placeholder width */
-    height: 100%;          /* Image fills the placeholder height */
-    object-fit: cover;     /* Crops image to fill container without distortion */
-    border-radius: 50%;    /* Ensures the image itself is also circular */
-}
+/* --- REMOVED DUPLICATE SECTIONS FOR SPOTLIGHT --- */
 
 /* --- ADDITIONAL DETAIL STYLING (For context) --- */
 
@@ -809,7 +789,7 @@
 .player-number {
     font-size: 3.5rem;
     line-height: 1;
-    color: #E84C3D; /* Red Accent */
+    color: #E84C3D;
+    /* Red Accent */
     margin-bottom: 5px;
 }
-

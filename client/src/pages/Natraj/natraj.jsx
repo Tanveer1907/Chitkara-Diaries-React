@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import "./natraj.css";
 import "../../styles/club-form.css";
 import MainNavbar from "../../components/navbar/main_navbar.jsx";
 import ClubFooter from "../../components/ClubFooter/ClubFooter.jsx";
+import StatusFeedback from "../../components/StatusFeedback/StatusFeedback.jsx";
 
 // Update these imports to your real image paths
 import heroMain from "../../assets/n2.jpg";
@@ -14,9 +15,21 @@ import look3 from "../../assets/n3.jpg";
 import heroVideo from "../../assets/natrajvid.mp4";
 
 export default function Natraj() {
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    error: ""
+  });
   return (
     <>
       <MainNavbar />
+
+      {/* FEEDBACK COMPONENT */}
+      <StatusFeedback
+        loading={status.loading}
+        success={status.success}
+        onClose={() => setStatus({ ...status, success: false })}
+      />
 
       <main className="panache-page">
         {/* HERO */}
@@ -91,12 +104,14 @@ export default function Natraj() {
 
             <form className="club-form" noValidate onSubmit={async (e) => {
               e.preventDefault();
-              alert("Form onSubmit triggered!");
-              console.log("Natraj form submitted");
+              setStatus({ loading: true, success: false, error: "" });
+
               try {
                 const form = new FormData(e.target);
                 const formData = Object.fromEntries(form.entries());
-                console.log("Sending data:", formData);
+
+                // Simulate small delay
+                await new Promise(r => setTimeout(r, 800));
 
                 const response = await fetch("/api/natraj/add", {
                   method: "POST",
@@ -105,13 +120,14 @@ export default function Natraj() {
                 });
                 const data = await response.json();
                 if (data.success) {
-                  alert("Success: " + data.message);
+                  setStatus({ loading: false, success: true, error: "" });
                   e.target.reset();
                 } else {
+                  setStatus({ loading: false, success: false, error: data.message });
                   alert("Server Error: " + data.message);
                 }
               } catch (err) {
-                console.error(err);
+                setStatus({ loading: false, success: false, error: err.message });
                 alert("Network Error: " + err.message);
               }
             }}>
@@ -133,7 +149,6 @@ export default function Natraj() {
               <button
                 type="submit"
                 className="club-btn-full"
-                onClick={() => alert("Button Clicked!")}
                 style={{ zIndex: 9999, position: 'relative' }}
               >
                 Submit interest

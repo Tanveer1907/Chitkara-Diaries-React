@@ -3,6 +3,7 @@ import "./osc.css";
 import "../../styles/club-form.css";
 import MainNavbar from "../../components/navbar/main_navbar";
 import ClubFooter from "../../components/ClubFooter/ClubFooter";
+import StatusFeedback from "../../components/StatusFeedback/StatusFeedback.jsx";
 
 import img1 from "../../assets/osc1.jpg";
 import img2 from "../../assets/osc2.jpg";
@@ -27,7 +28,11 @@ export default function Osc() {
     skills: ""
   });
 
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    error: ""
+  });
 
   // Handle Input
   const handleChange = (e) => {
@@ -40,10 +45,13 @@ export default function Osc() {
   // Handle Submit -> Backend
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("Submitting...");
+    setStatus({ loading: true, success: false, error: "" });
 
     try {
-      const res = await fetch("http://localhost:5000/api/osc/register", {
+      // Simulate small delay
+      await new Promise(r => setTimeout(r, 800));
+
+      const res = await fetch("/api/osc/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
@@ -52,7 +60,7 @@ export default function Osc() {
       const data = await res.json();
 
       if (data.success) {
-        setMessage("Registration successful!");
+        setStatus({ loading: false, success: true, error: "" });
         setFormData({
           first_name: "",
           last_name: "",
@@ -64,16 +72,25 @@ export default function Osc() {
           skills: ""
         });
       } else {
-        setMessage(data.message || "Something went wrong.");
+        setStatus({ loading: false, success: false, error: data.message || "Something went wrong." });
+        alert(data.message || "Something went wrong.");
       }
     } catch (err) {
-      setMessage("Server error.");
+      setStatus({ loading: false, success: false, error: "Server error." });
+      alert("Server error.");
     }
   };
 
   return (
     <>
       <MainNavbar />
+
+      {/* FEEDBACK COMPONENT */}
+      <StatusFeedback
+        loading={status.loading}
+        success={status.success}
+        onClose={() => setStatus({ ...status, success: false })}
+      />
       <div className="top-gap"></div>
       {/* Moving Images */}
       <div className="moving-images-container">
@@ -211,9 +228,9 @@ export default function Osc() {
 
             </div>
 
-            <button type="submit" className="club-btn-full">Register</button>
+            <button type="submit" className="club-btn-full" style={{ zIndex: 10, position: 'relative' }}>Register</button>
 
-            {message && <p className="club-form-intro" style={{ marginTop: "10px", color: message.includes("success") ? "green" : "red" }}>{message}</p>}
+
           </form>
         </div>
 

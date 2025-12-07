@@ -3,6 +3,7 @@ import "./basketball.css";
 import "../../styles/club-form.css";
 import MainNavbar from "../../components/navbar/main_navbar.jsx";
 import ClubFooter from "../../components/ClubFooter/ClubFooter.jsx";
+import StatusFeedback from "../../components/StatusFeedback/StatusFeedback.jsx";
 
 // 🔁 UPDATE THESE PATHS TO YOUR REAL ASSETS
 import heroVideo from "../../assets/basketballvid.mp4";
@@ -16,6 +17,12 @@ import captainImg from "../../assets/bb6.jpg";
 const heroImages = [strip1, strip2, strip3, strip4, strip5];
 
 export default function Basketball() {
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    error: ""
+  });
+
   const [stats, setStats] = useState({
     wins: 0,
     avgPoints: 0,
@@ -136,6 +143,13 @@ export default function Basketball() {
   return (
     <>
       <MainNavbar />
+
+      {/* FEEDBACK COMPONENT */}
+      <StatusFeedback
+        loading={status.loading}
+        success={status.success}
+        onClose={() => setStatus({ ...status, success: false })}
+      />
 
       <main className="bb-page">
         {/* HERO */}
@@ -261,12 +275,14 @@ export default function Basketball() {
               noValidate
               onSubmit={async (e) => {
                 e.preventDefault();
-                alert("Form onSubmit triggered!");
-                console.log("Basketball form submitted");
+                setStatus({ loading: true, success: false, error: "" });
+
                 try {
                   const form = new FormData(e.target);
                   const formData = Object.fromEntries(form.entries());
-                  console.log("Sending data:", formData);
+
+                  // Simulate small delay
+                  await new Promise(r => setTimeout(r, 800));
 
                   const response = await fetch("/api/basketball/add", {
                     method: "POST",
@@ -276,13 +292,14 @@ export default function Basketball() {
 
                   const data = await response.json();
                   if (data.success) {
-                    alert("Success: " + data.message);
+                    setStatus({ loading: false, success: true, error: "" });
                     e.target.reset();
                   } else {
+                    setStatus({ loading: false, success: false, error: data.message });
                     alert("Server Error: " + data.message);
                   }
                 } catch (err) {
-                  console.error("Submission error:", err);
+                  setStatus({ loading: false, success: false, error: err.message });
                   alert("Network Error: " + err.message);
                 }
               }}
@@ -339,7 +356,6 @@ export default function Basketball() {
               <button
                 type="submit"
                 className="club-btn-full"
-                onClick={() => alert("Button Clicked!")}
                 style={{ zIndex: 9999, position: 'relative' }}
               >
                 Submit Tryout Application

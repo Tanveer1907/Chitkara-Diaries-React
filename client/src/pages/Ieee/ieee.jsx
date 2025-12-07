@@ -3,6 +3,7 @@ import "./ieee.css";
 import "../../styles/club-form.css";
 import MainNavbar from "../../components/navbar/main_navbar.jsx";
 import ClubFooter from "../../components/ClubFooter/ClubFooter.jsx";
+import StatusFeedback from "../../components/StatusFeedback/StatusFeedback.jsx";
 
 import img1 from "../../assets/ieee1.jpg";
 import img2 from "../../assets/ieee2.jpg";
@@ -33,7 +34,11 @@ export default function Ieee() {
     skills: "",
   });
 
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    error: ""
+  });
 
   // handle input change
   const handleChange = (e) => {
@@ -43,10 +48,13 @@ export default function Ieee() {
   // backend submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
+    setStatus({ loading: true, success: false, error: "" });
 
     try {
-      const res = await fetch("http://localhost:5000/api/ieee/register", {
+      // Simulate small delay
+      await new Promise(r => setTimeout(r, 800));
+
+      const res = await fetch("/api/ieee/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -54,7 +62,7 @@ export default function Ieee() {
 
       const data = await res.json();
       if (data.success) {
-        setMessage("Successfully Registered!");
+        setStatus({ loading: false, success: true, error: "" });
         setFormData({
           first_name: "",
           last_name: "",
@@ -66,10 +74,12 @@ export default function Ieee() {
           skills: "",
         });
       } else {
-        setMessage(data.message || "Registration failed.");
+        setStatus({ loading: false, success: false, error: data.message || "Registration failed." });
+        alert(data.message || "Registration failed.");
       }
     } catch (err) {
-      setMessage("Server Error! Try again later.");
+      setStatus({ loading: false, success: false, error: "Server Error! Try again later." });
+      alert("Server Error! Try again later.");
     }
   };
 
@@ -111,6 +121,13 @@ export default function Ieee() {
   return (
     <>
       <MainNavbar />
+
+      {/* FEEDBACK COMPONENT */}
+      <StatusFeedback
+        loading={status.loading}
+        success={status.success}
+        onClose={() => setStatus({ ...status, success: false })}
+      />
       <div className="top-gap"></div>
       {/* MOVING IMAGES STRIP */}
       <div className="moving-images-container">
@@ -155,12 +172,12 @@ export default function Ieee() {
 
                   <div className="club-input-group">
                     <label>First Name *</label>
-                    <input name="first_name" value={formData.firstname} onChange={handleChange} required />
+                    <input name="first_name" value={formData.first_name} onChange={handleChange} required />
                   </div>
 
                   <div className="club-input-group">
                     <label>Last Name *</label>
-                    <input name="last_name" value={formData.lastname} onChange={handleChange} required />
+                    <input name="last_name" value={formData.last_name} onChange={handleChange} required />
                   </div>
 
                   <div className="club-input-group">
@@ -180,7 +197,7 @@ export default function Ieee() {
 
                   <div className="club-input-group">
                     <label>Preferred Team</label>
-                    <select name="preferred_team" value={formData.team} onChange={handleChange}>
+                    <select name="preferred_team" value={formData.preferred_team} onChange={handleChange}>
                       <option hidden></option>
                       <option value="organizing">Organizing Team</option>
                       <option value="media">Media Team</option>
@@ -205,8 +222,8 @@ export default function Ieee() {
                   </div>
                 </div>
 
-                <p className="form-msg">{message}</p>
-                <button className="club-btn-full">Join IEEE</button>
+
+                <button className="club-btn-full" type="submit" style={{ zIndex: 10, position: 'relative' }}>Join IEEE</button>
               </form>
             </div>
           </div>
