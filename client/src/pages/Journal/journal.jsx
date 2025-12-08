@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./journal.css";
 import Footer from "../../components/footer";
+import JournalEditor from "./JournalEditor";
+import JournalRenderer from "./JournalRenderer";
 
 import j1 from "../../assets/j1.mp4";
 import j2 from "../../assets/j2.mp4";
@@ -8,8 +10,36 @@ import j3 from "../../assets/j3.jpg";
 import j4 from "../../assets/j4.mp4";
 
 export default function Journal() {
-  // Each journal entry is a single page
-  const journals = [j1, j2, j3, j4];
+  // Initial journals
+  const initialJournals = [j1, j2, j3, j4];
+
+  const [journals, setJournals] = useState(initialJournals);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const handleSaveJournalPage = (elements) => {
+    // Determine type (if elements array -> composition)
+    const newPage = {
+      type: 'composition',
+      elements: elements
+    };
+    setJournals([...journals, newPage]);
+    setCreateModalOpen(false);
+  };
+
+  const closeCreateModal = () => {
+    setCreateModalOpen(false);
+  };
+
+  const deleteJournalPage = () => {
+    if (window.confirm("Are you sure you want to delete this page?")) {
+      const newJournals = journals.filter((_, index) => index !== currentPage);
+      setJournals(newJournals);
+      // Go to previous page if we deleted the last one
+      if (currentPage >= newJournals.length) {
+        setCurrentPage(Math.max(0, newJournals.length - 1));
+      }
+    }
+  };
 
   const [currentPage, setCurrentPage] = useState(0);
   const [isFlipping, setIsFlipping] = useState(false);
@@ -42,10 +72,15 @@ export default function Journal() {
   function Media({ src, alt }) {
     if (!src) return null;
 
+    // Check if it's a composition object
+    if (typeof src === 'object' && src.type === 'composition') {
+      return <JournalRenderer elements={src.elements} />;
+    }
+
+    // Default to string URL handling
     const isVideo =
-      src.endsWith(".mp4") ||
-      src.endsWith(".webm") ||
-      src.endsWith(".ogg");
+      typeof src === 'string' &&
+      (src.endsWith(".mp4") || src.endsWith(".webm") || src.endsWith(".ogg"));
 
     if (isVideo) {
       return (
@@ -63,12 +98,22 @@ export default function Journal() {
     return <img className="journal-media" src={src} alt={alt} />;
   }
 
+  // Check if current page is custom (for delete button)
+  const isCustomPage = typeof journals[currentPage] === 'object' && journals[currentPage]?.type === 'composition';
+
   return (
     <div className="journal-root">
 
       <header className="journal-header">
         Our Journals — From The Books of Our Students
       </header>
+
+      {/* Floating Create Button */}
+      <div className="create-journal-fab-container">
+        <button className="create-journal-btn" onClick={() => setCreateModalOpen(true)}>
+          <span>+</span> Create Journal
+        </button>
+      </div>
 
       <div className="journal-controls">
         <button
@@ -90,6 +135,17 @@ export default function Journal() {
         >
           Next ▶
         </button>
+
+        {isCustomPage && (
+          <button
+            className="journal-btn journal-delete-btn"
+            onClick={deleteJournalPage}
+            title="Delete this page"
+            style={{ marginLeft: '15px', background: '#d32f2f' }}
+          >
+            🗑️
+          </button>
+        )}
       </div>
 
       <div className="journal-container">
@@ -156,6 +212,18 @@ export default function Journal() {
       </div>
 
       <Footer />
-    </div>
+
+      {/* CREATE JOURNAL MODAL */}
+      {
+        createModalOpen && (
+          <div className="journal-modal-overlay">
+            <JournalEditor
+              onSave={handleSaveJournalPage}
+              onCancel={closeCreateModal}
+            />
+          </div>
+        )
+      }
+    </div >
   );
 }
