@@ -345,22 +345,37 @@ body {
 /* Popup on hover */
 .pin-popup {
   position: absolute;
-  top: -70px;
-  left: -40px;
+  /* Default: Above the pin */
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  margin-bottom: 22px;
+  /* Increased Gap */
   width: 150px;
   padding: 10px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
   opacity: 0;
-  transform: translateY(10px);
   transition: all 0.25s ease;
   pointer-events: none;
+  z-index: 100;
+}
+
+/* If pin is at the top, show popup BELOW */
+.pin-popup.popup-below {
+  top: 100%;
+  bottom: auto;
+  margin-bottom: 0;
+  margin-top: 22px;
+  /* Increased Gap */
+  transform: translateX(-50%) translateY(-10px);
 }
 
 .pin:hover .pin-popup {
   opacity: 1;
-  transform: translateY(0px);
+  /* Reset transform Y to 0 on hover for fade-in effect */
+  transform: translateX(-50%) translateY(0);
 }
 
 .pin-popup h4 {

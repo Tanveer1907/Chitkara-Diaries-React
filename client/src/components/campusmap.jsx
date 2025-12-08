@@ -41,7 +41,7 @@ export default function CampusMap() {
               onClick={() => window.open(loc.link, "_blank")}
             ></div>
 
-            <div className="pin-popup">
+            <div className={`pin-popup ${parseInt(loc.top) < 50 ? "popup-below" : ""}`}>
               <h4>{loc.name}</h4>
               <p>Click to explore 360° view</p>
             </div>

@@ -321,7 +321,7 @@ export default function VotingPg() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/voting/reviews")
+    fetch("/api/voting/reviews")
       .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
         const arr = Array.isArray(data) ? data : [];
@@ -365,7 +365,7 @@ export default function VotingPg() {
 
     updateCount(newReview.optionName, 1);
 
-    fetch("http://localhost:5000/api/voting/add-review", {
+    fetch("/api/voting/add-review", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newReview),
