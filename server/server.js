@@ -47,3 +47,15 @@ app.use("/api/panache", panacheRoutes);
 
 app.listen(5000, () => console.log("SERVER running on port 5000"));
 
+// ---------------- DEPLOYMENT ----------------
+const path = require("path");
+
+// Serve static files from React app
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+// The catch-all handler: for any request that doesn't match an API route,
+// send back the index.html file so React Router can handle it.
+app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
+
