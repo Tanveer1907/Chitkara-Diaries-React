@@ -119,7 +119,7 @@ export default function Ieee() {
 
   return (
     <>
-      <MainNavbar />
+
 
       {/* FEEDBACK COMPONENT */}
       <StatusFeedback

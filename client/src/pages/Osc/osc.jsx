@@ -82,7 +82,7 @@ export default function Osc() {
 
   return (
     <>
-      <MainNavbar />
+
 
       {/* FEEDBACK COMPONENT */}
       <StatusFeedback

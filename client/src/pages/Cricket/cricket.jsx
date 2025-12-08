@@ -78,7 +78,7 @@ export default function Cricket() {
 
   return (
     <div className="cricket-page">
-      <MainNavbar />
+
 
       {/* FEEDBACK COMPONENT */}
       <StatusFeedback
